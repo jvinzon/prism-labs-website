@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="sdaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Outer circle -->
+  <circle cx="60" cy="60" r="55" fill="none" stroke="url(#sdaGrad)" stroke-width="3"/>
+  
+  <!-- Inner circle -->
+  <circle cx="60" cy="60" r="48" fill="none" stroke="#CBD5E1" stroke-width="1"/>
+  
+  <!-- Open book motif -->
+  <path d="M 35 70 Q 60 55 85 70 L 85 85 Q 60 70 35 85 Z" fill="none" stroke="url(#sdaGrad)" stroke-width="2.5"/>
+  <line x1="60" y1="58" x2="60" y2="82" stroke="url(#sdaGrad)" stroke-width="2"/>
+  
+  <!-- Flame motif above book -->
+  <path d="M 60 35 Q 68 45 60 55 Q 52 45 60 35" fill="url(#sdaGrad)" opacity="0.8"/>
+  
+  <!-- ASDAH text -->
+  <text x="60" y="105" text-anchor="middle" font-family="'Helvetica Neue', Arial, sans-serif" font-size="14" font-weight="700" fill="url(#sdaGrad)">ASDAH</text>
+</svg>

@@ -1,0 +1,28 @@
+{
+  "announcements": [
+    {
+      "id": 1,
+      "title": "Welcome to PRISM Labs!",
+      "date": "2026-08-14",
+      "priority": "high",
+      "content": "Welcome to Term 3! We're excited to have you join PRISM Labs. This term we're covering AI literacy, ethics, and building real projects. Check out Week 4 resources and see you Thursday at 10:45 AM in Room 7!",
+      "author": "Mr. Vinzon"
+    },
+    {
+      "id": 2,
+      "title": "Bring Your Ideas!",
+      "date": "2026-08-10",
+      "priority": "normal",
+      "content": "Do you have an idea for a project? Maybe an app that would help students, a tool for teachers, or something completely new? Start thinking about it — we'll be pitching projects in Week 9. The best ideas can become real tools for our school!",
+      "author": "Mr. Vinzon"
+    },
+    {
+      "id": 3,
+      "title": "Permission Forms Due",
+      "date": "2026-08-07",
+      "priority": "normal",
+      "content": "If you haven't already, please bring your signed permission form to the next session. Forms were sent home with your registration confirmation. Without a signed form, we can't let you participate in club activities.",
+      "author": "Mr. Vinzon"
+    }
+  ]
+}

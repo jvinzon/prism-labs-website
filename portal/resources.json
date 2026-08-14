@@ -1,0 +1,189 @@
+{
+  "accessCode": "prismlabs2026",
+  "currentWeek": 4,
+  "term": "Term 3, 2026",
+  "weeks": [
+    {
+      "week": 4,
+      "theme": "AI Literacy Kickoff",
+      "description": "What AI really is — and how to steer it with your words",
+      "status": "unlocked",
+      "resources": [
+        {
+          "type": "slides",
+          "title": "Lesson Slides",
+          "url": "#",
+          "note": "Upload to Google Drive and update link"
+        },
+        {
+          "type": "code",
+          "title": "Code Examples",
+          "url": "#",
+          "note": "Create GitHub repo or Drive folder"
+        },
+        {
+          "type": "challenge",
+          "title": "Week 4 Challenge",
+          "url": "#",
+          "note": "Prompt engineering exercise"
+        }
+      ]
+    },
+    {
+      "week": 5,
+      "theme": "How AI Works & Why It Fails",
+      "description": "Under the hood: tokens, training, hallucinations, and bias",
+      "status": "locked",
+      "resources": [
+        {
+          "type": "slides",
+          "title": "Lesson Slides",
+          "url": "#",
+          "note": "To be uploaded Week 5"
+        },
+        {
+          "type": "code",
+          "title": "Code Examples",
+          "url": "#",
+          "note": "To be uploaded Week 5"
+        },
+        {
+          "type": "challenge",
+          "title": "Week 5 Challenge",
+          "url": "#",
+          "note": "To be uploaded Week 5"
+        }
+      ]
+    },
+    {
+      "week": 6,
+      "theme": "Ethics, Privacy & Integrity",
+      "description": "The responsible use framework: data, copyright, Te Tiriti",
+      "status": "locked",
+      "resources": [
+        {
+          "type": "slides",
+          "title": "Lesson Slides",
+          "url": "#",
+          "note": "To be uploaded Week 6"
+        },
+        {
+          "type": "reading",
+          "title": "Reading: AI Ethics",
+          "url": "#",
+          "note": "To be uploaded Week 6"
+        },
+        {
+          "type": "challenge",
+          "title": "Week 6 Challenge",
+          "url": "#",
+          "note": "To be uploaded Week 6"
+        }
+      ]
+    },
+    {
+      "week": 7,
+      "theme": "AI as a Learning Amplifier",
+      "description": "Build your personal AI study workflow and prompt pack",
+      "status": "locked",
+      "resources": [
+        {
+          "type": "slides",
+          "title": "Lesson Slides",
+          "url": "#",
+          "note": "To be uploaded Week 7"
+        },
+        {
+          "type": "template",
+          "title": "Prompt Pack Template",
+          "url": "#",
+          "note": "To be uploaded Week 7"
+        },
+        {
+          "type": "challenge",
+          "title": "Week 7 Challenge",
+          "url": "#",
+          "note": "To be uploaded Week 7"
+        }
+      ]
+    },
+    {
+      "week": 8,
+      "theme": "Open-Source & Local AI",
+      "description": "Run AI on your own machine — no cloud, no cost, no catch",
+      "status": "locked",
+      "resources": [
+        {
+          "type": "slides",
+          "title": "Lesson Slides",
+          "url": "#",
+          "note": "To be uploaded Week 8"
+        },
+        {
+          "type": "guide",
+          "title": "Ollama Setup Guide",
+          "url": "#",
+          "note": "To be uploaded Week 8"
+        },
+        {
+          "type": "challenge",
+          "title": "Week 8 Challenge",
+          "url": "#",
+          "note": "To be uploaded Week 8"
+        }
+      ]
+    },
+    {
+      "week": 9,
+      "theme": "Build Something Useful",
+      "description": "Team up, prototype a real tool, pitch it",
+      "status": "locked",
+      "resources": [
+        {
+          "type": "slides",
+          "title": "Lesson Slides",
+          "url": "#",
+          "note": "To be uploaded Week 9"
+        },
+        {
+          "type": "template",
+          "title": "Project Pitch Template",
+          "url": "#",
+          "note": "To be uploaded Week 9"
+        },
+        {
+          "type": "challenge",
+          "title": "Week 9 Challenge",
+          "url": "#",
+          "note": "To be uploaded Week 9"
+        }
+      ]
+    },
+    {
+      "week": 10,
+      "theme": "From Project to Micro-Business",
+      "description": "Turn your idea into something real — and maybe earn from it",
+      "status": "locked",
+      "resources": [
+        {
+          "type": "slides",
+          "title": "Lesson Slides",
+          "url": "#",
+          "note": "To be uploaded Week 10"
+        },
+        {
+          "type": "guide",
+          "title": "Student Business Guide",
+          "url": "#",
+          "note": "To be uploaded Week 10"
+        },
+        {
+          "type": "challenge",
+          "title": "Week 10 Challenge",
+          "url": "#",
+          "note": "To be uploaded Week 10"
+        }
+      ]
+    }
+  ]
+}

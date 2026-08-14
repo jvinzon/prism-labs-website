@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="PRISM Labs Members Portal — Access term resources, projects, and announcements.">
+  <title>Members Portal | PRISM Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Login Page -->
+  <div class="login-page" id="loginPage">
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-header">
+          <h1 class="login-title"><span class="gradient-text">PRISM</span> Labs</h1>
+          <p class="login-subtitle">Members Portal</p>
+        </div>
+        
+        <form class="login-form" id="loginForm">
+          <div class="form-group">
+            <label for="accessCode">Access Code</label>
+            <input type="password" id="accessCode" name="accessCode" required placeholder="Enter the member access code">
+            <p class="form-hint">Ask your teacher or a club mentor for the access code</p>
+          </div>
+          
+          <button type="submit" class="submit-button">
+            <span class="btn-text">Enter Portal</span>
+          </button>
+          
+          <div class="login-error" id="loginError" style="display: none;">
+            <p>Incorrect access code. Please try again.</p>
+          </div>
+        </form>
+        
+        <div class="login-footer">
+          <p>Not a member yet? <a href="../join.html">Join PRISM Labs</a></p>
+          <p><a href="../index.html">← Back to main site</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard (hidden until login) -->
+  <div class="portal-dashboard" id="portalDashboard" style="display: none;">
+    <!-- Navigation -->
+    <nav class="portal-nav">
+      <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+          <span class="logo-text"><span class="gradient-text">PRISM</span> Labs <span class="portal-badge">Members</span></span>
+        </a>
+        <button class="logout-btn" id="logoutBtn">Sign Out</button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="portal-main">
+      <div class="container">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+          <h1 class="welcome-title">Welcome to PRISM Labs!</h1>
+          <p class="welcome-subtitle">Term 3, 2026 — Weeks 4-10</p>
+        </section>
+
+        <!-- Announcements -->
+        <section class="announcements-section" id="announcementsSection">
+          <h2 class="section-title">📢 Announcements</h2>
+          <div class="announcements-grid" id="announcementsGrid">
+            <!-- Announcements loaded dynamically -->
+          </div>
+        </section>
+
+        <!-- Quick Stats -->
+        <section class="stats-section">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number" id="currentWeek">Week 4</div>
+              <div class="stat-label">Current Week</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="nextMeeting">Thursday</div>
+              <div class="stat-label">Next Meeting</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalResources">7</div>
+              <div class="stat-label">Week Resources</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="activeProjects">6</div>
+              <div class="stat-label">Future Projects</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Week-by-Week Resources -->
+        <section class="resources-section">
+          <h2 class="section-title">📚 Term Resources</h2>
+          <p class="section-description">Click on a week to access slides, code examples, and challenges</p>
+          
+          <div class="resources-grid" id="resourcesGrid">
+            <!-- Resources loaded dynamically -->
+          </div>
+        </section>
+
+        <!-- Projects -->
+        <section class="projects-section">
+          <h2 class="section-title">🚀 Projects & Opportunities</h2>
+          
+          <div class="projects-info">
+            <div class="project-card featured">
+              <h3>💡 Got a Project Idea?</h3>
+              <p>Want to build something for the school? Pitch your idea to the team and get mentors to help you build it!</p>
+              <a href="https://forms.office.com/" target="_blank" class="project-link">Submit Project Pitch →</a>
+              <p class="project-note">This opens a Microsoft Form to submit your project idea</p>
+            </div>
+            
+            <div class="project-card">
+              <h3>📋 Join a Future Project</h3>
+              <p>We're building toward some exciting projects. Get involved early!</p>
+              <ul class="project-list">
+                <li><strong>Term 4 2026:</strong> Smart Attendance System, Laptop Refurbishment</li>
+                <li><strong>2027:</strong> Smart Library Search, Media Automation, Student Marketplace</li>
+                <li><strong>2027-2028:</strong> Campus Pulse Platform</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Calendar -->
+        <section class="calendar-section">
+          <h2 class="section-title">📅 Meeting Schedule</h2>
+          
+          <div class="schedule-grid">
+            <div class="schedule-card">
+              <div class="schedule-day">Thursday</div>
+              <div class="schedule-time">10:45 AM — 11:30 AM</div>
+              <div class="schedule-type">Skills Workshop</div>
+              <div class="schedule-location">Computer Room (Room 7)</div>
+              <p class="schedule-desc">Teacher-led skills sessions — learn the tools and techniques you need for your projects</p>
+            </div>
+            
+            <div class="schedule-card">
+              <div class="schedule-day">Tuesday</div>
+              <div class="schedule-time">3:30 PM — 5:00 PM</div>
+              <div class="schedule-type">Project Lab</div>
+              <div class="schedule-location">Computer Room (Room 7)</div>
+              <p class="schedule-desc">Open build time — work on your projects, collaborate with your team, get hands-on support</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Resource Library -->
+        <section class="library-section">
+          <h2 class="section-title">📖 Quick Resources</h2>
+          
+          <div class="library-grid">
+            <a href="https://www.python.org/" target="_blank" class="resource-link-card">
+              <h3>🐍 Python</h3>
+              <p>Official documentation and tutorials</p>
+            </a>
+            <a href="https://developer.mozilla.org/" target="_blank" class="resource-link-card">
+              <h3>🌐 Web Dev</h3>
+              <p>MDN Web Docs — HTML, CSS, JavaScript</p>
+            </a>
+            <a href="https://chatgpt.com/" target="_blank" class="resource-link-card">
+              <h3>🤖 AI Tools</h3>
+              <p>ChatGPT, Claude, and other AI assistants</p>
+            </a>
+            <a href="https://github.com/" target="_blank" class="resource-link-card">
+              <h3>💻 GitHub</h3>
+              <p>Version control and collaboration</p>
+            </a>
+            <a href="https://ollama.com/" target="_blank" class="resource-link-card">
+              <h3>🦙 Local AI</h3>
+              <p>Run AI models on your own machine</p>
+            </a>
+            <a href="https://scratch.mit.edu/" target="_blank" class="resource-link-card">
+              <h3>🎮 For Beginners</h3>
+              <p>Start with visual programming</p>
+            </a>
+          </div>
+        </section>
+
+        <!-- Contact -->
+        <section class="contact-section">
+          <h2 class="section-title">📧 Need Help?</h2>
+          <p>Questions about the club, projects, or resources?</p>
+          <p><strong>Email:</strong> <a href="mailto:jedidiah@asdah.school.nz">jedidiah@asdah.school.nz</a></p>
+          <p><strong>Location:</strong> Computer Room (Room 7), ASDAH</p>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="portal-footer">
+      <div class="container">
+        <p>&copy; 2026 PRISM Labs — Members Portal</p>
+        <p class="footer-note">Built by students, for students</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

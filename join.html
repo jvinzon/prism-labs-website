@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Join PRISM Labs — Register to become a member of the technology club at ASDAH.">
+  <title>Join PRISM Labs | ASDAH</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-text"><span class="gradient-text">PRISM</span> Labs</span>
+      </a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span class="hamburger"></span>
+      </button>
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html#about" class="nav-link">About</a></li>
+        <li><a href="index.html#this-term" class="nav-link">This Term</a></li>
+        <li><a href="index.html#tracks" class="nav-link">Tracks</a></li>
+        <li><a href="index.html#future-projects" class="nav-link">Future Projects</a></li>
+        <li><a href="index.html#when-where" class="nav-link">When & Where</a></li>
+        <li><a href="portal/" class="nav-link">Members Portal</a></li>
+        <li><a href="join.html" class="nav-btn">Join</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Join Section -->
+  <section class="join-section">
+    <div class="container join-container">
+      <h1 class="join-title">Join PRISM Labs</h1>
+      
+      <form class="join-form" id="joinForm">
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" name="fullName" required placeholder="Your full name">
+        </div>
+        
+        <div class="form-group">
+          <label for="yearLevel">Year Level</label>
+          <select id="yearLevel" name="yearLevel" required>
+            <option value="">Select your year level</option>
+            <option value="Year 9">Year 9</option>
+            <option value="Year 10">Year 10</option>
+            <option value="Year 11">Year 11</option>
+            <option value="Year 12">Year 12</option>
+            <option value="Year 13">Year 13</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" required placeholder="your.email@asdah.school.nz">
+          <span class="form-hint">Use your school email if you have one, but any email is fine</span>
+        </div>
+        
+        <div class="form-group">
+          <label for="whyJoin">Why do you want to join PRISM Labs?</label>
+          <textarea id="whyJoin" name="whyJoin" rows="5" required placeholder="Tell us what interests you about technology, AI, or what you'd like to build..."></textarea>
+        </div>
+        
+        <button type="submit" class="submit-button" id="submitBtn">
+          <span class="btn-text">Submit Registration</span>
+          <span class="btn-loading" style="display: none;">Submitting...</span>
+        </button>
+      </form>
+      
+      <div class="form-success" id="formSuccess" style="display: none;">
+        <h2>Thanks for registering!</h2>
+        <p>We'll be in touch soon. See you Thursday at Skills Period.</p>
+      </div>
+      
+      <div class="form-error" id="formError" style="display: none;">
+        <p>Something went wrong. Please try again, or email <a href="mailto:jedidiah@asdah.school.nz">jedidiah@asdah.school.nz</a> directly.</p>
+      </div>
+      
+      <div class="what-next">
+        <h3>What happens next?</h3>
+        <ol>
+          <li>We'll email you to confirm your registration</li>
+          <li>Bring a signed permission form (we'll send it to you) to your first session</li>
+          <li>Show up Thursday at 10:45 AM — that's it!</li>
+        </ol>
+        <p class="join-note"><strong>PRISM Labs is free to join. No experience required. Open to all ASDAH students, Years 9-13.</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <img src="assets/sda-logo.webp" alt="ASDAH" class="footer-logo">
+          <p class="footer-school">Auckland Seventh-day Adventist High School</p>
+        </div>
+        <div class="footer-center">
+          <p class="footer-tagline">PRISM Labs — A student-led technology club at ASDAH</p>
+        </div>
+        <div class="footer-links">
+          <a href="index.html#about">About</a>
+          <a href="index.html#this-term">This Term</a>
+          <a href="index.html#tracks">Tracks</a>
+          <a href="index.html#future-projects">Future Projects</a>
+          <a href="join.html">Join</a>
+          <a href="mailto:jedidiah@asdah.school.nz">jedidiah@asdah.school.nz</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 PRISM Labs. Built by students, for students.</p>
+        <p class="footer-disclaimer">This is a student-led club. All activities are teacher-supervised and follow ASDAH school policies.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
