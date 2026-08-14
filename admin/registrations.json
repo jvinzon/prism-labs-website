@@ -1,0 +1,12 @@
+{
+  "registrations": [
+    {
+      "id": "reg-001",
+      "fullName": "Example Student",
+      "yearLevel": "Year 10",
+      "email": "student@asdah.school.nz",
+      "whyJoin": "I'm interested in AI and want to learn how to build cool projects with my friends!",
+      "submittedAt": "2026-08-14T10:30:00Z"
+    }
+  ]
+}

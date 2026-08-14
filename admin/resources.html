@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Resources | PRISM Labs Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .resources-manager {
+      background: var(--white);
+      padding: 32px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    
+    .week-card {
+      border: 2px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .week-card.unlocked {
+      border-color: var(--green);
+      background: linear-gradient(to right, rgba(16, 185, 129, 0.05), var(--white));
+    }
+    
+    .week-card.locked {
+      border-color: var(--orange);
+      opacity: 0.8;
+    }
+    
+    .week-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .status-badge {
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    
+    .status-badge.unlocked {
+      background: #DCFCE7;
+      color: #166534;
+    }
+    
+    .status-badge.locked {
+      background: #FFEDD5;
+      color: #9A3412;
+    }
+    
+    .resource-editor {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid #E2E8F0;
+    }
+    
+    .resource-item-editor {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+    
+    .resource-item-editor input {
+      flex: 1;
+      padding: 10px;
+      border: 2px solid #E2E8F0;
+      border-radius: 8px;
+    }
+    
+    .btn-toggle {
+      background: var(--blue);
+      color: var(--white);
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .btn-toggle:hover {
+      background: #1D4ED8;
+    }
+  </style>
+</head>
+<body>
+  <nav class="admin-nav">
+    <div class="nav-container">
+      <div class="nav-left">
+        <a href="index.html" style="text-decoration: none; color: inherit;">
+          <span class="admin-logo"><span class="gradient-text">PRISM</span> Labs Admin</span>
+        </a>
+      </div>
+      <div class="nav-right">
+        <span class="teacher-name">Mr. Vinzon</span>
+        <button class="logout-btn" id="adminLogoutBtn">Sign Out</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="admin-main">
+    <div class="container">
+      <section class="admin-welcome">
+        <h1 class="admin-title">Manage Resources</h1>
+        <p class="admin-subtitle">Unlock weeks and update resource links</p>
+      </section>
+
+      <div class="resources-manager" id="resourcesManager">
+        <p>Loading resources...</p>
+      </div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="index.html" class="view-all-btn" style="background: var(--white); color: var(--dark); border: 2px solid var(--gray);">← Back to Dashboard</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="admin-footer">
+    <div class="container">
+      <p>&copy; 2026 PRISM Labs Admin Dashboard</p>
+      <p class="footer-note">For teacher use only</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    async function loadResourcesManager() {
+      try {
+        const response = await fetch('../portal/resources.json');
+        const data = await response.json();
+        renderManager(data.weeks);
+      } catch (error) {
+        document.getElementById('resourcesManager').innerHTML = '<p>Error loading resources</p>';
+      }
+    }
+
+    function renderManager(weeks) {
+      const container = document.getElementById('resourcesManager');
+      
+      container.innerHTML = weeks.map(week => `
+        <div class="week-card ${week.status}">
+          <div class="week-header">
+            <div>
+              <h3 style="font-size: 1.25rem;">Week ${week.week}: ${week.theme}</h3>
+              <p style="color: var(--gray);">${week.description}</p>
+            </div>
+            <span class="status-badge ${week.status}">${week.status.toUpperCase()}</span>
+          </div>
+          
+          <div class="resource-editor">
+            <p style="font-weight: 600; margin-bottom: 12px;">Resources:</p>
+            ${week.resources.map((res, idx) => `
+              <div class="resource-item-editor">
+                <span style="font-size: 1.25rem;">${getResourceIcon(res.type)}</span>
+                <input type="text" value="${res.url}" placeholder="Resource URL" data-week="${week.week}" data-idx="${idx}" data-field="url">
+                <input type="text" value="${res.note}" placeholder="Note" style="flex: 0.5;" data-week="${week.week}" data-idx="${idx}" data-field="note">
+              </div>
+            `).join('')}
+          </div>
+          
+          <div style="margin-top: 16px; display: flex; gap: 12px;">
+            <button class="btn-toggle" onclick="toggleWeekStatus(${week.week})">
+              ${week.status === 'unlocked' ? '🔒 Lock Week' : '🔓 Unlock Week'}
+            </button>
+            <button class="btn-toggle" style="background: var(--green);" onclick="saveResources()">
+              💾 Save Changes
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getResourceIcon(type) {
+      const icons = { slides: '📊', code: '💻', challenge: '🎯', reading: '📖', template: '📝', guide: '📘' };
+      return icons[type] || '📄';
+    }
+
+    function toggleWeekStatus(weekNum) {
+      // Would update status in real app
+      alert(`Week ${weekNum} status would toggle here`);
+    }
+
+    function saveResources() {
+      // Would save to server in real app
+      alert('Changes saved! (Would update resources.json in production)');
+    }
+
+    loadResourcesManager();
+  </script>
+</body>
+</html>

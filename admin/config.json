@@ -1,0 +1,11 @@
+{
+  "adminUsername": "admin",
+  "adminPassword": "PrismTeacher2026!",
+  "salt": "prism-labs-asdah-secret-salt-key",
+  "teacherName": "Mr. Vinzon",
+  "teacherEmail": "jedidiah@asdah.school.nz",
+  "portalAccessCode": "prismlabs2026",
+  "currentWeek": 4,
+  "term": "Term 3, 2026",
+  "lastUpdated": "2026-08-14"
+}

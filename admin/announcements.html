@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Announcements | PRISM Labs Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .announcements-manager {
+      background: var(--white);
+      padding: 32px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    
+    .new-announcement-form {
+      background: var(--light);
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 32px;
+    }
+    
+    .new-announcement-form h3 {
+      margin-bottom: 16px;
+    }
+    
+    .form-row {
+      margin-bottom: 16px;
+    }
+    
+    .form-row label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    
+    .form-row input,
+    .form-row select,
+    .form-row textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #E2E8F0;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    
+    .form-row textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      color: var(--white);
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      width: auto;
+    }
+    
+    .announcement-list {
+      margin-top: 24px;
+    }
+    
+    .announcement-item {
+      border: 2px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    
+    .announcement-item.priority-high {
+      border-left: 4px solid var(--orange);
+      background: linear-gradient(to right, rgba(249, 115, 22, 0.05), var(--white));
+    }
+    
+    .announcement-item.priority-normal {
+      border-left: 4px solid var(--blue);
+    }
+    
+    .announcement-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    
+    .btn-small {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .btn-edit {
+      background: var(--blue);
+      color: var(--white);
+    }
+    
+    .btn-delete {
+      background: var(--white);
+      color: var(--red);
+      border: 2px solid var(--red);
+    }
+  </style>
+</head>
+<body>
+  <nav class="admin-nav">
+    <div class="nav-container">
+      <div class="nav-left">
+        <a href="index.html" style="text-decoration: none; color: inherit;">
+          <span class="admin-logo"><span class="gradient-text">PRISM</span> Labs Admin</span>
+        </a>
+      </div>
+      <div class="nav-right">
+        <span class="teacher-name">Mr. Vinzon</span>
+        <button class="logout-btn" id="adminLogoutBtn">Sign Out</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="admin-main">
+    <div class="container">
+      <section class="admin-welcome">
+        <h1 class="admin-title">Manage Announcements</h1>
+        <p class="admin-subtitle">Create, edit, and remove member announcements</p>
+      </section>
+
+      <div class="announcements-manager">
+        <div class="new-announcement-form">
+          <h3>📢 New Announcement</h3>
+          <form id="newAnnouncementForm">
+            <div class="form-row">
+              <label for="annTitle">Title</label>
+              <input type="text" id="annTitle" required placeholder="e.g., Welcome to PRISM Labs!">
+            </div>
+            <div class="form-row">
+              <label for="annContent">Content</label>
+              <textarea id="annContent" required placeholder="Write your announcement here..."></textarea>
+            </div>
+            <div class="form-row">
+              <label for="annPriority">Priority</label>
+              <select id="annPriority">
+                <option value="normal">Normal</option>
+                <option value="high">High (Highlighted)</option>
+              </select>
+            </div>
+            <button type="submit" class="btn-primary">Post Announcement</button>
+          </form>
+        </div>
+
+        <h2 style="margin-bottom: 20px;">Existing Announcements</h2>
+        <div class="announcement-list" id="announcementList">
+          <p>Loading announcements...</p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="index.html" class="view-all-btn" style="background: var(--white); color: var(--dark); border: 2px solid var(--gray);">← Back to Dashboard</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="admin-footer">
+    <div class="container">
+      <p>&copy; 2026 PRISM Labs Admin Dashboard</p>
+      <p class="footer-note">For teacher use only</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    async function loadAnnouncementsManager() {
+      try {
+        const response = await fetch('../portal/announcements.json');
+        const data = await response.json();
+        renderAnnouncements(data.announcements);
+      } catch (error) {
+        document.getElementById('announcementList').innerHTML = '<p>Error loading announcements</p>';
+      }
+    }
+
+    function renderAnnouncements(announcements) {
+      const sorted = announcements.sort((a, b) => new Date(b.date) - new Date(a.date));
+      
+      const container = document.getElementById('announcementList');
+      
+      if (sorted.length === 0) {
+        container.innerHTML = '<p style="color: var(--gray); text-align: center; padding: 40px 0;">No announcements yet</p>';
+        return;
+      }
+      
+      container.innerHTML = sorted.map(ann => `
+        <div class="announcement-item priority-${ann.priority}">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+            <h3 style="font-size: 1.1rem;">${ann.title}</h3>
+            <span style="font-size: 0.875rem; color: var(--gray);">${formatDate(ann.date)}</span>
+          </div>
+          <p style="color: var(--dark); line-height: 1.6; margin-bottom: 12px;">${ann.content}</p>
+          ${ann.author ? `<p style="font-size: 0.875rem; color: var(--gray); font-style: italic;">— ${ann.author}</p>` : ''}
+          <div class="announcement-actions">
+            <button class="btn-small btn-edit" onclick="editAnnouncement('${ann.id}')">✏️ Edit</button>
+            <button class="btn-small btn-delete" onclick="deleteAnnouncement('${ann.id}')">🗑️ Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-NZ', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    }
+
+    document.getElementById('newAnnouncementForm')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const title = document.getElementById('annTitle').value;
+      const content = document.getElementById('annContent').value;
+      const priority = document.getElementById('annPriority').value;
+      
+      const newAnnouncement = {
+        id: `ann-${Date.now()}`,
+        title,
+        content,
+        priority,
+        date: new Date().toISOString().split('T')[0],
+        author: 'Mr. Vinzon'
+      };
+      
+      // In real app, would save to server
+      alert('Announcement posted! (Would save to announcements.json in production)');
+      document.getElementById('newAnnouncementForm').reset();
+      loadAnnouncementsManager();
+    });
+
+    function editAnnouncement(id) {
+      alert(`Edit announcement ${id} (would open editor in production)`);
+    }
+
+    function deleteAnnouncement(id) {
+      if (confirm('Delete this announcement?')) {
+        alert('Announcement deleted (would remove from server in production)');
+        loadAnnouncementsManager();
+      }
+    }
+
+    loadAnnouncementsManager();
+  </script>
+</body>
+</html>

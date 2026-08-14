@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | PRISM Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Login Page -->
+  <div class="admin-login-page" id="adminLoginPage">
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-header">
+          <h1 class="login-title"><span class="gradient-text">PRISM</span> Labs Admin</h1>
+          <p class="login-subtitle">Teacher Dashboard</p>
+        </div>
+        
+        <form class="login-form" id="adminLoginForm">
+          <div class="form-group">
+            <label for="adminUsername">Username</label>
+            <input type="text" id="adminUsername" name="adminUsername" required placeholder="Enter admin username">
+          </div>
+          
+          <div class="form-group">
+            <label for="adminPassword">Password</label>
+            <input type="password" id="adminPassword" name="adminPassword" required placeholder="Enter admin password">
+          </div>
+          
+          <button type="submit" class="submit-button">
+            <span class="btn-text">Login to Dashboard</span>
+          </button>
+          
+          <div class="login-error" id="loginError" style="display: none;">
+            <p>Invalid credentials. Please try again.</p>
+          </div>
+        </form>
+        
+        <div class="login-footer">
+          <p><a href="../portal/">← Back to Members Portal</a></p>
+          <p><a href="../index.html">← Back to main site</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div class="admin-dashboard" id="adminDashboard" style="display: none;">
+    <!-- Top Navigation -->
+    <nav class="admin-nav">
+      <div class="nav-container">
+        <div class="nav-left">
+          <span class="admin-logo"><span class="gradient-text">PRISM</span> Labs Admin</span>
+        </div>
+        <div class="nav-right">
+          <span class="teacher-name" id="teacherNameDisplay">Mr. Vinzon</span>
+          <button class="logout-btn" id="adminLogoutBtn">Sign Out</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Dashboard -->
+    <main class="admin-main">
+      <div class="container">
+        <!-- Welcome Header -->
+        <section class="admin-welcome">
+          <h1 class="admin-title">Admin Dashboard</h1>
+          <p class="admin-subtitle">Manage PRISM Labs members, resources, and announcements</p>
+        </section>
+
+        <!-- Quick Stats -->
+        <section class="admin-stats">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-number" id="totalRegistrations">0</div>
+              <div class="stat-label">Total Registrations</div>
+              <div class="stat-action"><a href="registrations.html">View all →</a></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="currentWeekNum">4</div>
+              <div class="stat-label">Current Week</div>
+              <div class="stat-action"><a href="resources.html">Manage resources →</a></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="totalAnnouncements">0</div>
+              <div class="stat-label">Active Announcements</div>
+              <div class="stat-action"><a href="announcements.html">Manage →</a></div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-number" id="portalAccessCodeDisplay">****</div>
+              <div class="stat-label">Portal Access Code</div>
+              <div class="stat-action"><a href="#settings">Change →</a></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Quick Actions -->
+        <section class="quick-actions">
+          <h2 class="section-title">⚡ Quick Actions</h2>
+          <div class="actions-grid">
+            <a href="registrations.html" class="action-card">
+              <div class="action-icon">📝</div>
+              <h3>View Registrations</h3>
+              <p>See all student registrations, export to CSV, contact students</p>
+            </a>
+            <a href="resources.html" class="action-card">
+              <div class="action-icon">📚</div>
+              <h3>Manage Resources</h3>
+              <p>Unlock weeks, add slides/code/challenges, update links</p>
+            </a>
+            <a href="announcements.html" class="action-card">
+              <div class="action-icon">📢</div>
+              <h3>Post Announcements</h3>
+              <p>Create, edit, or remove announcements for members</p>
+            </a>
+            <a href="#settings" class="action-card" id="settingsAction">
+              <div class="action-icon">⚙️</div>
+              <h3>Settings</h3>
+              <p>Change access code, update term info, modify admin password</p>
+            </a>
+          </div>
+        </section>
+
+        <!-- Recent Registrations Preview -->
+        <section class="recent-registrations">
+          <h2 class="section-title">🆕 Recent Registrations</h2>
+          <div class="registrations-preview" id="registrationsPreview">
+            <p class="loading-text">Loading registrations...</p>
+          </div>
+          <div class="view-all-container">
+            <a href="registrations.html" class="view-all-btn">View All Registrations →</a>
+          </div>
+        </section>
+
+        <!-- Current Week Resources -->
+        <section class="current-resources">
+          <h2 class="section-title">📖 Week <span id="currentWeekDisplay">4</span> Resources</h2>
+          <div class="resources-preview" id="resourcesPreview">
+            <p class="loading-text">Loading resources...</p>
+          </div>
+          <div class="view-all-container">
+            <a href="resources.html" class="view-all-btn">Manage All Resources →</a>
+          </div>
+        </section>
+
+        <!-- Active Announcements Preview -->
+        <section class="active-announcements">
+          <h2 class="section-title">📣 Active Announcements</h2>
+          <div class="announcements-preview" id="announcementsPreview">
+            <p class="loading-text">Loading announcements...</p>
+          </div>
+          <div class="view-all-container">
+            <a href="announcements.html" class="view-all-btn">Manage All Announcements →</a>
+          </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section class="settings-section" id="settingsSection">
+          <h2 class="section-title">⚙️ Settings</h2>
+          
+          <div class="settings-grid">
+            <div class="settings-card">
+              <h3>Portal Access Code</h3>
+              <p>Change the code students use to access the members portal</p>
+              <form id="accessCodeForm" class="settings-form">
+                <div class="form-group">
+                  <label for="newAccessCode">New Access Code</label>
+                  <input type="text" id="newAccessCode" required minlength="4" placeholder="Enter new access code">
+                </div>
+                <button type="submit" class="btn-primary">Update Access Code</button>
+              </form>
+              <div class="form-message" id="accessCodeMessage"></div>
+            </div>
+
+            <div class="settings-card">
+              <h3>Current Week</h3>
+              <p>Set which week's resources are highlighted</p>
+              <form id="currentWeekForm" class="settings-form">
+                <div class="form-group">
+                  <label for="newCurrentWeek">Week Number</label>
+                  <input type="number" id="newCurrentWeek" required min="1" max="10" placeholder="e.g., 4">
+                </div>
+                <button type="submit" class="btn-primary">Update Week</button>
+              </form>
+              <div class="form-message" id="weekMessage"></div>
+            </div>
+
+            <div class="settings-card">
+              <h3>Admin Password</h3>
+              <p>Change your admin dashboard password</p>
+              <form id="adminPasswordForm" class="settings-form">
+                <div class="form-group">
+                  <label for="currentPassword">Current Password</label>
+                  <input type="password" id="currentPassword" required placeholder="Enter current password">
+                </div>
+                <div class="form-group">
+                  <label for="newPassword">New Password</label>
+                  <input type="password" id="newPassword" required minlength="8" placeholder="Enter new password">
+                </div>
+                <button type="submit" class="btn-primary">Change Password</button>
+              </form>
+              <div class="form-message" id="passwordMessage"></div>
+            </div>
+
+            <div class="settings-card">
+              <h3>Term Information</h3>
+              <p>Update the current term display</p>
+              <form id="termInfoForm" class="settings-form">
+                <div class="form-group">
+                  <label for="newTermInfo">Term Display</label>
+                  <input type="text" id="newTermInfo" required placeholder="e.g., Term 3, 2026">
+                </div>
+                <button type="submit" class="btn-primary">Update Term Info</button>
+              </form>
+              <div class="form-message" id="termMessage"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Data Management -->
+        <section class="data-section">
+          <h2 class="section-title">💾 Data Management</h2>
+          
+          <div class="data-grid">
+            <div class="data-card">
+              <h3>Export Registrations</h3>
+              <p>Download all student registrations as a CSV file</p>
+              <button class="btn-secondary" id="exportRegistrationsBtn">Export CSV</button>
+            </div>
+            
+            <div class="data-card">
+              <h3>Backup All Data</h3>
+              <p>Download a backup of all portal data (resources, announcements, registrations)</p>
+              <button class="btn-secondary" id="backupDataBtn">Download Backup</button>
+            </div>
+            
+            <div class="data-card warning">
+              <h3>⚠️ Reset Portal Data</h3>
+              <p>Clear all registrations and reset to defaults (cannot be undone)</p>
+              <button class="btn-danger" id="resetDataBtn">Reset All Data</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="admin-footer">
+      <div class="container">
+        <p>&copy; 2026 PRISM Labs Admin Dashboard</p>
+        <p class="footer-note">For teacher use only</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
