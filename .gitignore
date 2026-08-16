@@ -1,57 +1,31 @@
 # Dependencies
 node_modules/
-npm-debug.log
-yarn-error.log
-package-lock.json
-yarn.lock
 
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-.venv
-*.egg-info/
-dist/
-build/
-
-# Environment variables
+# Environment
 .env
 .env.local
-.env.*.local
+.env.production
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
+# Database
+data/*.db
+data/*.db-journal
 
-# OS
-.DS_Store
-Thumbs.db
-desktop.ini
+# Uploads
+uploads/*
+!uploads/.gitkeep
 
 # Logs
 logs/
 *.log
 
-# Temporary files
-tmp/
-temp/
-*.tmp
+# OS files
+.DS_Store
+Thumbs.db
 
-# Testing
-coverage/
-.nyc_output/
+# IDE
+.vscode/
+.idea/
 
-# Vercel
-.vercel/
-
-# Local test files
-test.html
-*.local.html
+# Build
+dist/
+build/

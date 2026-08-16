@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="<%= typeof description !== 'undefined' ? description : 'PRISM Labs - Technology club at ASDAH' %>">
+  <title><%= title || 'PRISM Labs' %></title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="/css/main.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="/" class="nav-brand">
+        <svg class="logo" viewBox="0 0 600 300" width="120" height="60">
+          <defs>
+            <linearGradient id="prismGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2563EB"/>
+              <stop offset="100%" stop-color="#10B981"/>
+            </linearGradient>
+          </defs>
+          <circle cx="150" cy="100" r="32" fill="url(#prismGrad)"/>
+          <text x="150" y="100" text-anchor="middle" dominant-baseline="central" font-family="Inter, sans-serif" font-size="24" font-weight="800" fill="#FFF">P</text>
+          <circle cx="300" cy="100" r="32" fill="#8B5CF6"/>
+          <text x="300" y="100" text-anchor="middle" dominant-baseline="central" font-family="Inter, sans-serif" font-size="24" font-weight="800" fill="#FFF">R</text>
+          <circle cx="450" cy="100" r="32" fill="#10B981"/>
+          <text x="450" y="100" text-anchor="middle" dominant-baseline="central" font-family="Inter, sans-serif" font-size="24" font-weight="800" fill="#FFF">I</text>
+          <circle cx="300" cy="200" r="32" fill="#F97316"/>
+          <text x="300" y="200" text-anchor="middle" dominant-baseline="central" font-family="Inter, sans-serif" font-size="24" font-weight="800" fill="#FFF">S</text>
+          <text x="300" y="278" text-anchor="middle" font-family="Inter, sans-serif" font-size="22" font-weight="800">
+            <tspan fill="url(#prismGrad)">PRISM</tspan><tspan fill="#1E293B"> Labs</tspan>
+          </text>
+        </svg>
+      </a>
+      
+      <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/about" class="nav-link">About</a>
+        <a href="/resources" class="nav-link">Resources</a>
+        <a href="/calendar" class="nav-link">Events</a>
+        <a href="/join" class="nav-link btn-primary">Join Now</a>
+      </div>
+      
+      <% if (typeof user !== 'undefined' && user) { %>
+        <div class="nav-user">
+          <span class="user-name"><%= user.name %></span>
+          <a href="<%= user.role === 'admin' ? '/admin/dashboard' : '/members/dashboard' %>" class="btn-secondary">Dashboard</a>
+          <a href="/auth/logout" class="btn-text">Logout</a>
+        </div>
+      <% } %>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  <% if (typeof success !== 'undefined' && success && success.length > 0) { %>
+    <div class="flash-message flash-success">
+      <div class="container"><%= success %></div>
+    </div>
+  <% } %>
+  
+  <% if (typeof error !== 'undefined' && error && error.length > 0) { %>
+    <div class="flash-message flash-error">
+      <div class="container"><%= error %></div>
+    </div>
+  <% } %>
+
+  <!-- Main Content -->
+  <main>
+    <%- body %>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>PRISM Labs</h3>
+          <p>Where curiosity becomes capability.</p>
+          <p class="footer-copyright">&copy; <%= new Date().getFullYear() %> ASDAH PRISM Labs</p>
+        </div>
+        <div class="footer-links">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/resources">Resources</a></li>
+            <li><a href="/calendar">Events</a></li>
+            <li><a href="/join">Join</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Tracks</h4>
+          <ul>
+            <li>Programming</li>
+            <li>Refurbishing</li>
+            <li>Innovation</li>
+            <li>Systems Management</li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h4>Contact</h4>
+          <p>Computer Room (Room 7)</p>
+          <p>ASDAH</p>
+          <p><a href="mailto:fine@asdah.school.nz">fine@asdah.school.nz</a></p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+</body>
+</html>
