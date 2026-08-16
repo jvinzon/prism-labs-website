@@ -1,6 +1,332 @@
+<% layout = 'layouts/main' %>
 
+<!-- Inline CSS as fallback -->
+<style>
+/* PRISM Labs Styles */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: #1E293B;
+  background: #FFFFFF;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
+  color: white;
+  padding: 6rem 0;
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #FCD34D, #F472B6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+  opacity: 0.95;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+.btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: white;
+  color: #3B82F6;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.btn-secondary {
+  border: 2px solid white;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: white;
+  color: #3B82F6;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 3rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+/* Tracks Section */
+.tracks-section {
+  padding: 5rem 0;
+  background: #F8FAFC;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  text-align: center;
+  color: #64748B;
+  margin-bottom: 3rem;
+}
+
+.tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.track-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-top: 5px solid #3B82F6;
+}
+
+.track-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.track-programming { border-color: #3B82F6; }
+.track-refurbishing { border-color: #8B5CF6; }
+.track-innovation { border-color: #10B981; }
+.track-systems { border-color: #F97316; }
+
+.track-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.track-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.track-card p {
+  color: #64748B;
+  margin-bottom: 1.5rem;
+}
+
+.track-skills {
+  list-style: none;
+  padding-left: 0;
+}
+
+.track-skills li {
+  padding: 0.5rem 0;
+  color: #475569;
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.track-skills li:before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #10B981;
+  font-weight: bold;
+}
+
+/* About Section */
+.about-section {
+  padding: 5rem 0;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  margin-top: 3rem;
+}
+
+.about-content h3 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.feature-list {
+  list-style: none;
+}
+
+.feature-list li {
+  margin-bottom: 1.5rem;
+}
+
+.feature-icon {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+}
+
+.feature-title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.feature-desc {
+  color: #64748B;
+  font-size: 0.95rem;
+}
+
+.about-image {
+  background: linear-gradient(135deg, #E0E7FF, #F0F9FF);
+  border-radius: 1.5rem;
+  padding: 3rem;
+  text-align: center;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholder-circle {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Schedule Section */
+.schedule-section {
+  padding: 5rem 0;
+  background: #F8FAFC;
+}
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.schedule-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  border-left: 4px solid #EC4899;
+}
+
+.schedule-card h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.schedule-time {
+  color: #64748B;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.schedule-location {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #475569;
+}
+
+/* CTA Section */
+.cta-section {
+  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  color: white;
+  padding: 5rem 0;
+  text-align: center;
+}
+
+.cta-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cta-section p {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+  opacity: 0.95;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .hero-title { font-size: 2.5rem; }
+  .about-grid { grid-template-columns: 1fr; }
+  .hero-stats { gap: 1.5rem; }
+  .container { padding: 0 1rem; }
+}
+</style>
+
+<!-- Hero -->
 <section class="hero">
-  <div class="container hero-content">
+  <div class="container">
     <div class="hero-badge">🌈 Technology Club at ASDAH</div>
     <h1 class="hero-title">
       Where Curiosity Becomes <span class="gradient-text">Capability</span>
@@ -11,7 +337,7 @@
       cutting-edge skills, and connect with like-minded peers.
     </p>
     <div class="hero-cta">
-      <a href="/join" class="btn btn-primary btn-lg">Join PRISM Labs</a>
+      <a href="/members/login" class="btn btn-primary btn-lg">Join PRISM Labs</a>
       <a href="/about" class="btn btn-secondary btn-lg">Learn More</a>
     </div>
     <div class="hero-stats">
@@ -31,6 +357,7 @@
   </div>
 </section>
 
+<!-- Tracks -->
 <section class="tracks-section">
   <div class="container">
     <h2 class="section-title">Four Tracks, Endless Possibilities</h2>
@@ -88,96 +415,78 @@
   </div>
 </section>
 
+<!-- About -->
 <section class="about-section">
   <div class="container">
     <div class="about-grid">
       <div class="about-content">
-        <h2 class="section-title">What is PRISM Labs?</h2>
-        <p>
-          PRISM Labs is ASDAH's technology club where students explore, create, and collaborate 
-          on real-world projects. We're not just learning about technology — we're building it, 
-          breaking it, and rebuilding it better.
+        <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">What is PRISM Labs?</h2>
+        <p style="color: #64748B; margin-bottom: 2rem; font-size: 1.1rem;">
+          PRISM Labs is ASDAH's technology club where students explore, create, and collaborate on real-world projects. 
+          We're not just learning about technology — we're building it, breaking it, and rebuilding it better.
         </p>
-        <p>
-          Whether you're a complete beginner or already coding in your spare time, there's a 
-          place for you here. Our peer-to-peer learning model means everyone teaches and 
-          everyone learns.
+        <p style="color: #64748B; margin-bottom: 2rem; font-size: 1.1rem;">
+          Whether you're a complete beginner or already coding in your spare time, there's a place for you here. 
+          Our peer-to-peer learning model means everyone teaches and everyone learns.
         </p>
-        <div class="about-highlights">
-          <div class="highlight">
-            <span class="highlight-icon">🎯</span>
-            <div>
-              <strong>Project-Based</strong>
-              <p>Learn by doing, not by listening to lectures</p>
-            </div>
-          </div>
-          <div class="highlight">
-            <span class="highlight-icon">🤝</span>
-            <div>
-              <strong>Peer Learning</strong>
-              <p>Teach others, deepen your own understanding</p>
-            </div>
-          </div>
-          <div class="highlight">
-            <span class="highlight-icon">🚀</span>
-            <div>
-              <strong>Real Projects</strong>
-              <p>Build things that matter to our school community</p>
-            </div>
-          </div>
-        </div>
+        
+        <ul class="feature-list">
+          <li>
+            <div class="feature-title">🎯 Project-Based</div>
+            <div class="feature-desc">Learn by doing, not by listening to lectures</div>
+          </li>
+          <li>
+            <div class="feature-title">🤝 Peer Learning</div>
+            <div class="feature-desc">Teach others, deepen your own understanding</div>
+          </li>
+          <li>
+            <div class="feature-title">🚀 Real Projects</div>
+            <div class="feature-desc">Build things that matter to our school community</div>
+          </li>
+        </ul>
       </div>
+      
       <div class="about-image">
-        <div class="placeholder-image">
-          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-            <rect width="400" height="300" fill="#F1F5F9"/>
-            <circle cx="200" cy="150" r="80" fill="#2563EB" opacity="0.1"/>
-            <circle cx="200" cy="150" r="60" fill="#10B981" opacity="0.1"/>
-            <text x="200" y="155" text-anchor="middle" font-family="Inter, sans-serif" font-size="18" fill="#64748B">Club Photo</text>
-          </svg>
-        </div>
+        <div class="placeholder-circle">Club Photo</div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="sessions-section">
+<!-- Schedule -->
+<section class="schedule-section">
   <div class="container">
     <h2 class="section-title">When & Where</h2>
-    <div class="sessions-grid">
-      <div class="session-card">
-        <div class="session-time">
-          <span class="session-day">Thursday</span>
-          <span class="session-clock">10:45 AM - 11:30 AM</span>
-        </div>
-        <div class="session-details">
-          <h4>Skills Period</h4>
-          <p>Teacher-led skills sessions — learn the tools and techniques you need for your projects</p>
-          <span class="session-location">📍 Computer Room (Room 7)</span>
+    
+    <div class="schedule-grid">
+      <div class="schedule-card">
+        <h4>Skills Period</h4>
+        <div class="schedule-time">Thursday 10:45 AM - 11:30 AM</div>
+        <p style="margin-bottom: 1rem;">Teacher-led skills sessions — learn the tools and techniques you need for your projects</p>
+        <div class="schedule-location">
+          <span>📍</span>
+          <span>Computer Room (Room 7)</span>
         </div>
       </div>
       
-      <div class="session-card">
-        <div class="session-time">
-          <span class="session-day">Tuesday</span>
-          <span class="session-clock">3:30 PM - 5:00 PM</span>
-        </div>
-        <div class="session-details">
-          <h4>After School Session</h4>
-          <p>Open project time — work on your projects, get help, collaborate with the team</p>
-          <span class="session-location">📍 Computer Room (Room 7)</span>
+      <div class="schedule-card">
+        <h4>After School Session</h4>
+        <div class="schedule-time">Tuesday 3:30 PM - 5:00 PM</div>
+        <p style="margin-bottom: 1rem;">Open project time — work on your projects, get help, collaborate with the team</p>
+        <div class="schedule-location">
+          <span>📍</span>
+          <span>Computer Room (Room 7)</span>
         </div>
       </div>
     </div>
   </div>
 </section>
 
+<!-- CTA -->
 <section class="cta-section">
   <div class="container">
-    <div class="cta-content">
-      <h2>Ready to Start Your Tech Journey?</h2>
-      <p>Join PRISM Labs and become part of a community of creators, problem-solvers, and innovators.</p>
-      <a href="/join" class="btn btn-primary btn-lg">Become a Member</a>
-    </div>
+    <h2>Ready to Start Your Tech Journey?</h2>
+    <p>Join PRISM Labs and become part of a community of creators, problem-solvers, and innovators.</p>
+    <a href="/members/login" class="btn btn-primary btn-lg">Become a Member</a>
   </div>
 </section>
