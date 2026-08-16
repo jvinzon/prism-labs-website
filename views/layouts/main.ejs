@@ -31,12 +31,18 @@
         <a href="/about" class="nav-link">About</a>
         <a href="/showcase" class="nav-link">Showcase</a>
         <a href="/blog" class="nav-link">Blog</a>
+        
         <% if (typeof user !== 'undefined' && user) { %>
-          <a href="/members/paths" class="nav-link">Learning</a>
-          <a href="/members/social/feed" class="nav-link">Social</a>
+          <!-- Logged In -->
+          <a href="/members/dashboard" class="nav-link">Dashboard</a>
+          <a href="/members/resources" class="nav-link">Resources</a>
           <a href="/members/gamification/leaderboard" class="nav-link btn-accent">Leaderboard</a>
+          <a href="/members/auth/logout" class="nav-link">Logout</a>
         <% } else { %>
-          <a href="/members/auth/login" class="nav-link btn-accent">Member Portal</a>
+          <!-- Logged Out -->
+          <a href="/members/login" class="nav-link btn-primary" style="background: var(--accent-color); color: white; padding: 0.5rem 1rem; border-radius: 0.5rem;">
+            🔐 Member Login
+          </a>
         <% } %>
       </div>
     </div>
@@ -44,11 +50,16 @@
 
   <!-- Main Content -->
   <main class="main-content">
-    <% if (typeof layout === 'undefined' || layout !== false) { %>
-      <%- body %>
-    <% } else { %>
-      <%- body %>
+    <!-- Flash Messages -->
+    <% if (typeof messages !== 'undefined' && messages && messages.length > 0) { %>
+      <div class="flash-messages">
+        <% messages.forEach(msg => { %>
+          <div class="flash-message flash-<%= msg.type %>"><%= msg.message %></div>
+        <% }) %>
+      </div>
     <% } %>
+    
+    <%- body %>
   </main>
 
   <!-- Footer -->
@@ -78,10 +89,10 @@
         
         <div class="footer-links">
           <h4>Members</h4>
+          <a href="/members/login">Member Login</a>
+          <a href="/members/resources">Resources</a>
           <a href="/members/paths">Learning Paths</a>
-          <a href="/members/bookings">Bookings</a>
           <a href="/members/gamification/leaderboard">Leaderboard</a>
-          <a href="/members/social/feed">Social Feed</a>
         </div>
         
         <div class="footer-contact">
@@ -101,6 +112,13 @@
           <button class="theme-btn" data-theme="ocean" title="Ocean Theme">🌊 Ocean</button>
           <button class="theme-btn" data-theme="forest" title="Forest Theme">🌲 Forest</button>
         </div>
+      </div>
+      
+      <!-- Discreet Admin Login -->
+      <div class="admin-login-link" style="text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+        <a href="/admin/login" style="color: var(--text-secondary); font-size: 0.75rem; text-decoration: none; opacity: 0.5;">
+          Admin Login
+        </a>
       </div>
     </div>
   </footer>

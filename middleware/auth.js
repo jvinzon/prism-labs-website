@@ -1,44 +1,50 @@
-const db = require('../db');
+const { createDatabase } = require('../db');
 
+// Check if user is authenticated
 function requireAuth(req, res, next) {
-  if (req.isAuthenticated()) {
+  if (req.session && req.session.userId) {
     return next();
   }
   req.flash('error', 'Please log in to access this page');
-  res.redirect('/auth/login');
+  res.redirect('/members/login');
 }
 
-function requireAdmin(req, res, next) {
-  if (req.isAuthenticated() && req.user.role === 'admin') {
-    return next();
+// Check if user is admin
+async function requireAdmin(req, res, next) {
+  if (!req.session || !req.session.userId) {
+    req.flash('error', 'Please log in');
+    return res.redirect('/admin/login');
   }
-  req.flash('error', 'Access denied. Admin privileges required.');
-  res.redirect('/members/dashboard');
-}
-
-function requireRole(...roles) {
-  return (req, res, next) => {
-    if (req.isAuthenticated() && roles.includes(req.user.role)) {
-      return next();
-    }
-    req.flash('error', 'Access denied. Insufficient privileges.');
-    res.redirect('/members/dashboard');
-  };
-}
-
-function loadUser(req, res, next) {
-  if (req.user) {
-    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.user.id);
-    if (user) {
-      req.user = user;
-    }
+  
+  const db = await createDatabase();
+  const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.session.userId);
+  db.close();
+  
+  if (!user || user.role !== 'admin') {
+    req.flash('error', 'Access denied. Admin privileges required.');
+    return res.redirect('/members/dashboard');
   }
+  
+  req.user = user;
+  return next();
+}
+
+// Flash messages middleware
+function flashMessages(req, res, next) {
+  res.locals.messages = req.session.messages || [];
+  req.session.messages = [];
+  res.locals.user = req.session.user || null;
   next();
+}
+
+// Add flash message
+function flash(type, message) {
+  this.session.messages = this.session.messages || [];
+  this.session.messages.push({ type, message });
 }
 
 module.exports = {
   requireAuth,
   requireAdmin,
-  requireRole,
-  loadUser
+  flashMessages
 };

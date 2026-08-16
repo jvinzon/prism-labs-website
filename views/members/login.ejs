@@ -1,0 +1,133 @@
+<% layout = 'layouts/main' %>
+
+<style>
+.login-container {
+  max-width: 500px;
+  margin: 4rem auto;
+  padding: 2rem;
+}
+
+.login-card {
+  background: var(--bg-secondary);
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.login-logo {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 2rem;
+}
+
+.login-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.login-subtitle {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.microsoft-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  background: #2F2F2F;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  margin-bottom: 2rem;
+}
+
+.microsoft-btn:hover {
+  background: #404040;
+  transform: translateY(-2px);
+}
+
+.microsoft-icon {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  width: 24px;
+  height: 24px;
+}
+
+.microsoft-square {
+  width: 10px;
+  height: 10px;
+}
+
+.ms-red { background: #F25022; }
+.ms-green { background: #7FBA00; }
+.ms-blue { background: #00A4EF; }
+.ms-yellow { background: #FFB900; }
+
+.login-info {
+  background: var(--bg-primary);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  text-align: left;
+}
+
+.login-info h3 {
+  margin-bottom: 1rem;
+  font-size: 1.125rem;
+}
+
+.login-info ul {
+  list-style: none;
+  padding: 0;
+}
+
+.login-info li {
+  padding: 0.5rem 0;
+  color: var(--text-secondary);
+}
+
+.login-info li::before {
+  content: "✓ ";
+  color: var(--accent-color);
+  font-weight: 700;
+}
+</style>
+
+<div class="login-container">
+  <div class="login-card">
+    <img src="/img/prism-logo.svg" alt="PRISM Labs" class="login-logo">
+    
+    <h1 class="login-title">Member Login</h1>
+    <p class="login-subtitle">Sign in with your ASDAH Microsoft 365 account</p>
+    
+    <a href="/auth/microsoft" class="microsoft-btn">
+      <div class="microsoft-icon">
+        <div class="microsoft-square ms-red"></div>
+        <div class="microsoft-square ms-green"></div>
+        <div class="microsoft-square ms-blue"></div>
+        <div class="microsoft-square ms-yellow"></div>
+      </div>
+      Sign in with Microsoft
+    </a>
+    
+    <div class="login-info">
+      <h3>What you'll get access to:</h3>
+      <ul>
+        <li>Personalized dashboard with your XP and progress</li>
+        <li>38+ curated learning resources</li>
+        <li>Learning paths and career guidance</li>
+        <li>Team competitions and challenges</li>
+        <li>Equipment and room bookings</li>
+        <li>Social feed to connect with other members</li>
+        <li>PRISM Shop rewards</li>
+      </ul>
+    </div>
+  </div>
+</div>
