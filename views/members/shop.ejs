@@ -1,0 +1,232 @@
+<% layout = 'layouts/main' %>
+
+<style>
+.shop-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.shop-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.xp-balance {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+  color: white;
+  border-radius: 9999px;
+  font-weight: 800;
+  font-size: 1.25rem;
+  margin-top: 1rem;
+}
+
+.shop-tabs {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.shop-tab {
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 600;
+  border: 2px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.shop-tab.active, .shop-tab:hover {
+  background: var(--accent-color);
+  color: white;
+}
+
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.shop-item {
+  background: var(--bg-secondary);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s;
+}
+
+.shop-item:hover {
+  transform: translateY(-5px);
+}
+
+.item-icon {
+  font-size: 4rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.item-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.item-description {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.item-cost {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+}
+
+.item-type {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  background: var(--bg-primary);
+  margin-bottom: 1rem;
+}
+
+.btn-buy {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  border: none;
+  background: var(--accent-color);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-buy:hover {
+  background: var(--accent-hover);
+  transform: scale(1.02);
+}
+
+.btn-buy:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.my-purchases {
+  background: var(--bg-secondary);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-top: 3rem;
+}
+
+.purchase-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.purchase-item {
+  padding: 1rem;
+  background: var(--bg-primary);
+  border-radius: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>
+
+<div class="shop-container">
+  <div class="shop-header">
+    <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏪 PRISM Shop</h1>
+    <p style="color: var(--text-secondary);">Spend your XP on rewards!</p>
+    <div class="xp-balance">
+      ⭐ <%= userXP.toLocaleString() %> XP Available
+    </div>
+  </div>
+
+  <div class="shop-tabs">
+    <a href="/members/shop?filter=all" class="shop-tab <%= filter === 'all' ? 'active' : '' %>">All Items</a>
+    <a href="/members/shop?filter=digital" class="shop-tab <%= filter === 'digital' ? 'active' : '' %>">Digital</a>
+    <a href="/members/shop?filter=privilege" class="shop-tab <%= filter === 'privilege' ? 'active' : '' %>">Privileges</a>
+    <a href="/members/shop?filter=physical" class="shop-tab <%= filter === 'physical' ? 'active' : '' %>">Physical</a>
+  </div>
+
+  <div class="shop-grid">
+    <% items.forEach(item => { %>
+      <div class="shop-item">
+        <div class="item-icon">
+          <% if (item.item_type === 'digital') { %>🏅<% } %>
+          <% if (item.item_type === 'privilege') { %>🎫<% } %>
+          <% if (item.item_type === 'physical') { %>🎁<% } %>
+        </div>
+        <div class="item-name"><%= item.name %></div>
+        <div class="item-description"><%= item.description %></div>
+        <div class="item-type"><%= item.item_type.toUpperCase() %></div>
+        <div class="item-cost">
+          <span>⭐</span>
+          <span><%= item.xp_cost.toLocaleString() %> XP</span>
+        </div>
+        <% if (item.quantity_available !== null) { %>
+          <div style="margin-bottom: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
+            <%= item.quantity_available %> left in stock
+          </div>
+        <% } %>
+        <button class="btn-buy" onclick="buyItem('<%= item.id %>')" <%= userXP < item.xp_cost ? 'disabled' : '' %>>
+          <%= userXP < item.xp_cost ? 'Not Enough XP' : 'Purchase' %>
+        </button>
+      </div>
+    <% }) %>
+  </div>
+
+  <% if (purchases && purchases.length > 0) { %>
+    <div class="my-purchases">
+      <h2 style="margin-bottom: 1.5rem;">🛍️ My Purchases</h2>
+      <div class="purchase-list">
+        <% purchases.forEach(purchase => { %>
+          <div class="purchase-item">
+            <div>
+              <div style="font-weight: 700;"><%= purchase.item_name %></div>
+              <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                <%= new Date(purchase.purchased_at).toLocaleDateString() %> • <%= purchase.xp_spent %> XP
+              </div>
+            </div>
+            <div style="padding: 0.5rem 1rem; background: <%= purchase.status === 'delivered' ? '#D1FAE5' : '#FEF3C7' %>; color: <%= purchase.status === 'delivered' ? '#065F46' : '#92400E' %>; border-radius: 0.5rem; font-weight: 700; font-size: 0.875rem;">
+              <%= purchase.status.toUpperCase() %>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+<script>
+async function buyItem(itemId) {
+  if (!confirm('Confirm purchase?')) return;
+  
+  const response = await fetch('/members/gamification/shop/purchase', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ item_id: itemId })
+  });
+  
+  const result = await response.json();
+  if (result.success) {
+    alert(result.message);
+    location.reload();
+  } else {
+    alert(result.error || 'Purchase failed');
+  }
+}
+</script>

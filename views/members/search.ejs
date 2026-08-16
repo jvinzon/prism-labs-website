@@ -1,0 +1,104 @@
+<% layout = 'layouts/main' %>
+
+<style>
+.search-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.search-form {
+  margin-bottom: 2rem;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid #E2E8F0;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #2563EB;
+}
+
+.search-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-tab {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  color: #64748B;
+  font-weight: 600;
+  border: 1px solid #E2E8F0;
+}
+
+.search-tab.active {
+  background: #2563EB;
+  color: white;
+  border-color: #2563EB;
+}
+</style>
+
+<div class="search-container">
+  <h1 style="margin-bottom: 1.5rem;">🔍 Search</h1>
+  
+  <form class="search-form" action="/members/social/search" method="GET">
+    <input type="text" name="q" class="search-input" 
+           placeholder="Search posts or people..." 
+           value="<%= query || '' %>" required>
+  </form>
+  
+  <div class="search-tabs">
+    <a href="?q=<%= query %>&type=posts" 
+       class="search-tab <%= type === 'posts' ? 'active' : '' %>">
+      Posts
+    </a>
+    <a href="?q=<%= query %>&type=users" 
+       class="search-tab <%= type === 'users' ? 'active' : '' %>">
+      People
+    </a>
+  </div>
+  
+  <% if (results && results.length > 0) { %>
+    <% if (type === 'posts') { %>
+      <% results.forEach(post => { %>
+        <%- include('post-card', { post: post, currentUser: user }) %>
+      <% }) %>
+    <% } else { %>
+      <% results.forEach(user => { %>
+        <div style="background: white; border-radius: 1rem; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 1rem; display: flex; gap: 1rem; align-items: center;">
+          <div class="avatar">
+            <%= user.avatar_url ? '<img src="' + user.avatar_url + '" style="width:100%;height:100%;border-radius:50%;">' : user.name.charAt(0) %>
+          </div>
+          <div style="flex: 1;">
+            <strong style="font-size: 1.125rem;"><%= user.name %></strong>
+            <div style="color: #64748B; font-size: 0.875rem;">
+              <%= user.bio ? user.bio.substring(0, 100) : 'Year ' + user.year_level %>
+            </div>
+          </div>
+          <a href="/members/social/user/<%= user.id %>" 
+             style="background: #1E293B; color: white; padding: 0.5rem 1.5rem; border-radius: 9999px; text-decoration: none; font-weight: 600;">
+            View Profile
+          </a>
+        </div>
+      <% }) %>
+    <% } %>
+  <% } else if (query) { %>
+    <div style="text-align: center; padding: 3rem; color: #64748B;">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">🔍</div>
+      <p>No results found for "<%= query %>"</p>
+    </div>
+  <% } else { %>
+    <div style="text-align: center; padding: 3rem; color: #64748B;">
+      <p>Start typing to search posts and people</p>
+    </div>
+  <% } %>
+</div>

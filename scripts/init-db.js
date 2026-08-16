@@ -416,6 +416,370 @@ db.exec(`
   )
 `);
 
+
+// ============ SOCIAL MEDIA FEED ============
+db.exec(`
+  CREATE TABLE IF NOT EXISTS social_posts (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    content TEXT NOT NULL,
+    character_count INTEGER DEFAULT 0,
+    parent_id TEXT, -- For replies
+    is_retweet INTEGER DEFAULT 0,
+    original_post_id TEXT,
+    media_urls TEXT, -- JSON array
+    hashtags TEXT, -- JSON array
+    mentions TEXT, -- JSON array
+    likes_count INTEGER DEFAULT 0,
+    retweets_count INTEGER DEFAULT 0,
+    replies_count INTEGER DEFAULT 0,
+    views_count INTEGER DEFAULT 0,
+    is_edited INTEGER DEFAULT 0,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (parent_id) REFERENCES social_posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (original_post_id) REFERENCES social_posts(id) ON DELETE CASCADE
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS post_likes (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    post_id TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES social_posts(id) ON DELETE CASCADE,
+    UNIQUE(user_id, post_id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS post_retweets (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    post_id TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES social_posts(id) ON DELETE CASCADE,
+    UNIQUE(user_id, post_id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS post_bookmarks (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    post_id TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES social_posts(id) ON DELETE CASCADE,
+    UNIQUE(user_id, post_id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS follows (
+    id TEXT PRIMARY KEY,
+    follower_id TEXT NOT NULL,
+    following_id TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (follower_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (following_id) REFERENCES users(id) ON DELETE CASCADE,
+    UNIQUE(follower_id, following_id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS notifications (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    type TEXT CHECK(type IN ('like', 'retweet', 'reply', 'follow', 'mention')),
+    actor_id TEXT NOT NULL,
+    post_id TEXT,
+    is_read INTEGER DEFAULT 0,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (actor_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (post_id) REFERENCES social_posts(id) ON DELETE CASCADE
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS trending_topics (
+    id TEXT PRIMARY KEY,
+    hashtag TEXT NOT NULL UNIQUE,
+    post_count INTEGER DEFAULT 0,
+    last_used TEXT,
+    category TEXT DEFAULT 'general'
+  )
+`);
+
+
+
+// ============ PUBLIC PROJECT SHOWCASE ============
+db.exec(`
+  CREATE TABLE IF NOT EXISTS project_showcase (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    description TEXT,
+    track TEXT CHECK(track IN ('Programming', 'Refurbishing', 'Innovation', 'Systems')),
+    team_members TEXT, -- JSON array of user IDs
+    lead_student_id TEXT,
+    status TEXT CHECK(status IN ('planning', 'in_progress', 'completed', 'showcased')),
+    github_repo TEXT,
+    demo_url TEXT,
+    screenshots TEXT, -- JSON array of image URLs
+    technologies TEXT, -- JSON array
+    skills_developed TEXT, -- JSON array
+    term TEXT, -- e.g., "2026-T3"
+    year INTEGER,
+    is_public INTEGER DEFAULT 1,
+    is_featured INTEGER DEFAULT 0,
+    views_count INTEGER DEFAULT 0,
+    likes_count INTEGER DEFAULT 0,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT,
+    FOREIGN KEY (lead_student_id) REFERENCES users(id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS showcase_likes (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    project_id TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES project_showcase(id) ON DELETE CASCADE,
+    UNIQUE(user_id, project_id)
+  )
+`);
+
+// ============ LEARNING PATHS & CAREER PROGRESSION ============
+db.exec(`
+  CREATE TABLE IF NOT EXISTS learning_paths (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL, -- e.g., "Software Engineer Path"
+    track TEXT CHECK(track IN ('Programming', 'Refurbishing', 'Innovation', 'Systems')),
+    description TEXT,
+    career_outcomes TEXT, -- JSON array of careers
+    estimated_duration TEXT, -- e.g., "2-3 years"
+    difficulty TEXT CHECK(difficulty IN ('beginner', 'intermediate', 'advanced')),
+    is_active INTEGER DEFAULT 1,
+    sort_order INTEGER DEFAULT 0,
+    created_at TEXT DEFAULT (datetime('now'))
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS path_milestones (
+    id TEXT PRIMARY KEY,
+    path_id TEXT NOT NULL,
+    name TEXT NOT NULL, -- e.g., "Learn Python Basics"
+    description TEXT,
+    milestone_type TEXT CHECK(milestone_type IN ('skill', 'project', 'certification', 'competition')),
+    order_in_path INTEGER DEFAULT 0,
+    estimated_hours INTEGER,
+    resources TEXT, -- JSON array of resource IDs
+    prerequisites TEXT, -- JSON array of milestone IDs
+    badge_id TEXT,
+    is_completed INTEGER DEFAULT 0,
+    FOREIGN KEY (path_id) REFERENCES learning_paths(id) ON DELETE CASCADE,
+    FOREIGN KEY (badge_id) REFERENCES badges(id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS user_path_progress (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    path_id TEXT NOT NULL,
+    milestone_id TEXT,
+    started_at TEXT DEFAULT (datetime('now')),
+    completed_at TEXT,
+    progress_percentage INTEGER DEFAULT 0,
+    status TEXT CHECK(status IN ('not_started', 'in_progress', 'completed', 'abandoned')),
+    notes TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (path_id) REFERENCES learning_paths(id) ON DELETE CASCADE,
+    FOREIGN KEY (milestone_id) REFERENCES path_milestones(id),
+    UNIQUE(user_id, path_id, milestone_id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS career_outcomes (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL, -- e.g., "Software Engineer"
+    industry TEXT, -- e.g., "Technology"
+    description TEXT,
+    avg_salary_nzd TEXT, -- e.g., "$70,000 - $120,000"
+    required_skills TEXT, -- JSON array
+    related_paths TEXT, -- JSON array of path IDs
+    study_pathways TEXT, -- JSON array (e.g., "Computer Science degree", "Bootcamp")
+    job_outlook TEXT, -- e.g., "High demand"
+    is_active INTEGER DEFAULT 1
+  )
+`);
+
+// ============ EQUIPMENT & ROOM BOOKING + RESOURCE REQUESTS ============
+db.exec(`
+  CREATE TABLE IF NOT EXISTS bookable_items (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL, -- e.g., "Dell Laptop #5", "Computer Room", "ESP32 Kit"
+    item_type TEXT CHECK(item_type IN ('laptop', 'component', 'tool', 'room', 'other')),
+    category TEXT,
+    description TEXT,
+    quantity INTEGER DEFAULT 1,
+    available_quantity INTEGER DEFAULT 1,
+    booking_unit TEXT DEFAULT 'hour', -- hour, day, session
+    max_booking_duration INTEGER DEFAULT 4, -- max hours per booking
+    requires_approval INTEGER DEFAULT 0,
+    approval_role TEXT DEFAULT 'admin',
+    image_url TEXT,
+    is_active INTEGER DEFAULT 1,
+    created_at TEXT DEFAULT (datetime('now'))
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS bookings (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    item_id TEXT NOT NULL,
+    start_time TEXT NOT NULL,
+    end_time TEXT NOT NULL,
+    purpose TEXT, -- Why they need it
+    status TEXT CHECK(status IN ('pending', 'approved', 'rejected', 'completed', 'cancelled')),
+    approved_by TEXT,
+    approved_at TEXT,
+    rejected_reason TEXT,
+    notes TEXT,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (item_id) REFERENCES bookable_items(id),
+    FOREIGN KEY (approved_by) REFERENCES users(id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS resource_requests (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    request_type TEXT CHECK(request_type IN ('component', 'equipment', 'software', 'book', 'other')),
+    item_name TEXT NOT NULL,
+    description TEXT,
+    justification TEXT, -- Why they need it
+    estimated_cost REAL,
+    quantity INTEGER DEFAULT 1,
+    project_id TEXT, -- Related project
+    status TEXT CHECK(status IN ('pending', 'approved', 'ordered', 'received', 'rejected')),
+    approved_by TEXT,
+    approved_at TEXT,
+    ordered_at TEXT,
+    received_at TEXT,
+    rejected_reason TEXT,
+    notes TEXT,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (project_id) REFERENCES projects(id),
+    FOREIGN KEY (approved_by) REFERENCES users(id)
+  )
+`);
+
+// ============ BLOG / NEWS SECTION ============
+db.exec(`
+  CREATE TABLE IF NOT EXISTS blog_posts (
+    id TEXT PRIMARY KEY,
+    title TEXT NOT NULL,
+    slug TEXT UNIQUE NOT NULL,
+    content TEXT NOT NULL, -- Markdown
+    excerpt TEXT,
+    author_id TEXT,
+    post_type TEXT CHECK(post_type IN ('news', 'lesson_recap', 'project_spotlight', 'announcement', 'tutorial')),
+    track TEXT,
+    tags TEXT, -- JSON array
+    featured_image TEXT,
+    is_published INTEGER DEFAULT 0,
+    published_at TEXT,
+    views_count INTEGER DEFAULT 0,
+    is_featured INTEGER DEFAULT 0,
+    allow_comments INTEGER DEFAULT 1,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT,
+    FOREIGN KEY (author_id) REFERENCES users(id)
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS blog_comments (
+    id TEXT PRIMARY KEY,
+    post_id TEXT NOT NULL,
+    user_id TEXT NOT NULL,
+    content TEXT NOT NULL,
+    parent_id TEXT,
+    is_approved INTEGER DEFAULT 1,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (post_id) REFERENCES blog_posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (parent_id) REFERENCES blog_comments(id) ON DELETE CASCADE
+  )
+`);
+
+// ============ THEME PREFERENCES ============
+db.exec(`
+  CREATE TABLE IF NOT EXISTS user_preferences (
+    id TEXT PRIMARY KEY,
+    user_id TEXT UNIQUE NOT NULL,
+    theme TEXT CHECK(theme IN ('light', 'dark', 'prism', 'ocean', 'forest')) DEFAULT 'light',
+    accent_color TEXT DEFAULT '#2563EB',
+    font_size TEXT CHECK(font_size IN ('small', 'medium', 'large')) DEFAULT 'medium',
+    email_notifications INTEGER DEFAULT 1,
+    sms_notifications INTEGER DEFAULT 0,
+    weekly_digest INTEGER DEFAULT 1,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  )
+`);
+
+// ============ AUTOMATED REMINDERS ============
+db.exec(`
+  CREATE TABLE IF NOT EXISTS reminder_templates (
+    id TEXT PRIMARY KEY,
+    name TEXT NOT NULL, -- e.g., "Session Reminder"
+    type TEXT CHECK(type IN ('email', 'sms', 'teams')),
+    subject TEXT,
+    content TEXT, -- With placeholders like {name}, {event_time}, {location}
+    is_active INTEGER DEFAULT 1,
+    created_at TEXT DEFAULT (datetime('now'))
+  )
+`);
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS scheduled_reminders (
+    id TEXT PRIMARY KEY,
+    template_id TEXT NOT NULL,
+    recipient_type TEXT CHECK(recipient_type IN ('all', 'members', 'admins', 'specific')),
+    recipient_ids TEXT, -- JSON array if specific
+    related_event_id TEXT,
+    related_booking_id TEXT,
+    send_at TEXT NOT NULL,
+    sent_at TEXT,
+    status TEXT CHECK(status IN ('pending', 'sent', 'failed')),
+    error_message TEXT,
+    created_at TEXT DEFAULT (datetime('now')),
+    FOREIGN KEY (template_id) REFERENCES reminder_templates(id),
+    FOREIGN KEY (related_event_id) REFERENCES events(id),
+    FOREIGN KEY (related_booking_id) REFERENCES bookings(id)
+  )
+`);
+
+console.log('New tables created for: Projects, Learning Paths, Bookings, Blog, Themes, Reminders');
+
+
 console.log('Inserting default data...');
 
 // Default badges

@@ -1,0 +1,85 @@
+<article class="post-card">
+  <div class="post-header">
+    <a href="/members/social/user/<%= post.user_id %>" class="avatar" style="text-decoration: none;">
+      <%= post.avatar_url ? '<img src="' + post.avatar_url + '" alt="' + post.name + '" style="width:100%;height:100%;border-radius:50%;">' : post.name.charAt(0) %>
+    </a>
+    <div class="post-meta">
+      <div>
+        <a href="/members/social/user/<%= post.user_id %>" class="post-author"><%= post.name %></a>
+        <span class="post-handle">@<%= post.name.toLowerCase().replace(' ', '') %></span>
+        <span class="post-time">· <%= new Date(post.created_at).toLocaleDateString() %></span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="post-content">
+    <%= post.content.replace(/#([\w]+)/g, '<a href="/members/social/search?q=%23$1" class="hashtag">#$1</a>').replace(/@([\w]+)/g, '<a href="/members/social/search?q=@$1" class="mention">@$1</a>') %>
+  </div>
+  
+  <div class="post-actions">
+    <a href="/members/social/post/<%= post.id %>" class="action-btn">
+      <span class="action-icon">💬</span>
+      <span><%= post.replies_count || 0 %></span>
+    </a>
+    
+    <button class="action-btn <%= post.is_retweeted ? 'retweeted' : '' %>" 
+            onclick="toggleRetweet('<%= post.id %>')">
+      <span class="action-icon">🔁</span>
+      <span><%= post.retweets_count || 0 %></span>
+    </button>
+    
+    <button class="action-btn <%= post.is_liked ? 'liked' : '' %>" 
+            onclick="toggleLike('<%= post.id %>')">
+      <span class="action-icon">❤️</span>
+      <span><%= post.likes_count || 0 %></span>
+    </button>
+    
+    <button class="action-btn" onclick="toggleBookmark('<%= post.id %>')">
+      <span class="action-icon">🔖</span>
+    </button>
+  </div>
+</article>
+
+<script>
+async function toggleLike(postId) {
+  const isLiked = event.currentTarget.classList.contains('liked');
+  const url = isLiked ? `/members/social/${postId}/unlike` : `/members/social/${postId}/like`;
+  
+  try {
+    const response = await fetch(url, { method: 'POST' });
+    const result = await response.json();
+    if (result.success) {
+      location.reload();
+    }
+  } catch (err) {
+    console.error('Like error:', err);
+  }
+}
+
+async function toggleRetweet(postId) {
+  const isRetweeted = event.currentTarget.classList.contains('retweeted');
+  const url = isRetweeted ? `/members/social/${postId}/unretweet` : `/members/social/${postId}/retweet`;
+  
+  try {
+    const response = await fetch(url, { method: 'POST' });
+    const result = await response.json();
+    if (result.success) {
+      location.reload();
+    }
+  } catch (err) {
+    console.error('Retweet error:', err);
+  }
+}
+
+async function toggleBookmark(postId) {
+  try {
+    const response = await fetch(`/members/social/${postId}/bookmark`, { method: 'POST' });
+    const result = await response.json();
+    if (result.success) {
+      alert(result.action === 'bookmarked' ? 'Post bookmarked!' : 'Bookmark removed');
+    }
+  } catch (err) {
+    console.error('Bookmark error:', err);
+  }
+}
+</script>

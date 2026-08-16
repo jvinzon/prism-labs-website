@@ -1,0 +1,25 @@
+<% layout = 'layouts/main' %>
+
+<style>
+.bookmarks-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+</style>
+
+<div class="bookmarks-container">
+  <h1 style="margin-bottom: 2rem;">🔖 Bookmarks</h1>
+  
+  <% if (bookmarks && bookmarks.length > 0) { %>
+    <% bookmarks.forEach(post => { %>
+      <%- include('post-card', { post: post, currentUser: user }) %>
+    <% }) %>
+  <% } else { %>
+    <div style="text-align: center; padding: 3rem; color: #64748B;">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">🔖</div>
+      <p>No bookmarks yet</p>
+      <p style="font-size: 0.875rem;">Save posts to read them later!</p>
+    </div>
+  <% } %>
+</div>

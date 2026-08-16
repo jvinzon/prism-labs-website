@@ -1,0 +1,243 @@
+<% layout = 'layouts/main' %>
+
+<style>
+.challenges-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.challenges-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.challenges-tabs {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.ch-tab {
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 600;
+  border: 2px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.ch-tab.active, .ch-tab:hover {
+  background: var(--accent-color);
+  color: white;
+}
+
+.challenge-card {
+  background: var(--bg-secondary);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border-left: 6px solid var(--accent-color);
+}
+
+.challenge-card.easy { border-left-color: #10B981; }
+.challenge-card.medium { border-left-color: #F97316; }
+.challenge-card.hard { border-left-color: #EF4444; }
+.challenge-card.legendary { border-left-color: #8B5CF6; }
+
+.challenge-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.challenge-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.challenge-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  background: var(--bg-primary);
+}
+
+.challenge-description {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.challenge-rewards {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.ch-reward {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+}
+
+.challenge-progress {
+  background: var(--bg-primary);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  height: 16px;
+  background: var(--border-color);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-color), var(--accent-hover));
+  border-radius: 9999px;
+  width: <%= progress %>%;
+}
+
+.challenge-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-join, .btn-submit {
+  padding: 0.75rem 2rem;
+  border-radius: 0.75rem;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-join {
+  background: var(--accent-color);
+  color: white;
+}
+
+.btn-submit {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+}
+</style>
+
+<div class="challenges-container">
+  <div class="challenges-header">
+    <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎯 Challenges & Quests</h1>
+    <p style="color: var(--text-secondary);">Complete challenges to earn XP and badges!</p>
+  </div>
+
+  <div class="challenges-tabs">
+    <a href="/members/challenges?filter=weekly" class="ch-tab <%= filter === 'weekly' ? 'active' : '' %>">Weekly</a>
+    <a href="/members/challenges?filter=monthly" class="ch-tab <%= filter === 'monthly' ? 'active' : '' %>">Monthly</a>
+    <a href="/members/challenges?filter=completed" class="ch-tab <%= filter === 'completed' ? 'active' : '' %>">Completed</a>
+  </div>
+
+  <% if (challenges && challenges.length > 0) { %>
+    <% challenges.forEach(challenge => { %>
+      <div class="challenge-card <%= challenge.difficulty %>">
+        <div class="challenge-top">
+          <div>
+            <div class="challenge-title"><%= challenge.title %></div>
+            <div>
+              <span class="challenge-badge"><%= challenge.difficulty.toUpperCase() %></span>
+              <span class="challenge-badge" style="margin-left: 0.5rem;"><%= challenge.challenge_type %></span>
+            </div>
+          </div>
+          <% if (challenge.badge_icon) { %>
+            <div style="font-size: 3rem;"><%= challenge.badge_icon %></div>
+          <% } %>
+        </div>
+
+        <div class="challenge-description">
+          <%= challenge.description %>
+        </div>
+
+        <div class="challenge-rewards">
+          <div class="ch-reward">
+            <span style="font-size: 1.5rem;">⭐</span>
+            <span><%= challenge.xp_reward %> XP</span>
+          </div>
+          <% if (challenge.badge_name) { %>
+            <div class="ch-reward">
+              <span style="font-size: 1.5rem;">🏅</span>
+              <span><%= challenge.badge_name %></span>
+            </div>
+          <% } %>
+        </div>
+
+        <% if (challenge.user_status === 'in_progress') { %>
+          <div class="challenge-progress">
+            <div style="display: flex; justify-content: space-between;">
+              <span style="font-weight: 700;">Your Progress</span>
+              <span style="font-weight: 700;"><%= challenge.user_progress %> / <%= challenge.target_value %></span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: <%= (challenge.user_progress / challenge.target_value) * 100 %>%;"></div>
+            </div>
+          </div>
+        <% } %>
+
+        <div class="challenge-actions">
+          <% if (challenge.user_status === 'available') { %>
+            <button class="btn-join" onclick="joinChallenge('<%= challenge.id %>')">Join Challenge</button>
+          <% } else if (challenge.user_status === 'in_progress' && !challenge.auto_track) { %>
+            <button class="btn-submit" onclick="submitChallenge('<%= challenge.id %>')">Submit Proof</button>
+          <% } else if (challenge.user_status === 'completed') { %>
+            <div style="padding: 0.75rem 2rem; background: #D1FAE5; color: #065F46; border-radius: 0.75rem; font-weight: 700;">
+              ✓ Completed!
+            </div>
+          <% } %>
+        </div>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <div style="text-align: center; padding: 4rem; color: var(--text-secondary);">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">🎯</div>
+      <h3>No challenges available</h3>
+      <p>Check back later for new challenges!</p>
+    </div>
+  <% } %>
+</div>
+
+<script>
+async function joinChallenge(challengeId) {
+  const response = await fetch('/members/gamification/challenges/' + challengeId + '/join', {
+    method: 'POST'
+  });
+  const result = await response.json();
+  if (result.success) {
+    alert(result.message);
+    location.reload();
+  }
+}
+
+async function submitChallenge(challengeId) {
+  const proof = prompt('Enter proof of completion (URL, description, etc.):');
+  if (proof) {
+    const response = await fetch('/members/gamification/challenges/' + challengeId + '/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ proof_url: proof })
+    });
+    const result = await response.json();
+    alert(result.message);
+  }
+}
+</script>

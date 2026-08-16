@@ -1,0 +1,83 @@
+<% layout = 'layouts/main' %>
+
+<style>
+.trending-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.trending-list {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.trending-item {
+  padding: 1.5rem;
+  border-bottom: 1px solid #E2E8F0;
+  transition: background 0.2s;
+}
+
+.trending-item:hover {
+  background: #F8FAFC;
+}
+
+.trending-item:last-child {
+  border-bottom: none;
+}
+
+.trending-rank {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #2563EB, #10B981);
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 32px;
+  font-weight: 700;
+  margin-right: 1rem;
+}
+
+.trending-tag {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1E293B;
+  text-decoration: none;
+}
+
+.trending-tag:hover {
+  color: #2563EB;
+}
+
+.trending-count {
+  color: #64748B;
+  margin-top: 0.5rem;
+}
+</style>
+
+<div class="trending-container">
+  <h1 style="margin-bottom: 2rem;">📈 Trending in PRISM Labs</h1>
+  
+  <% if (trending && trending.length > 0) { %>
+    <div class="trending-list">
+      <% trending.forEach((topic, index) => { %>
+        <div class="trending-item">
+          <span class="trending-rank"><%= index + 1 %></span>
+          <a href="/members/social/search?q=<%= topic.hashtag %>" class="trending-tag">
+            <%= topic.hashtag %>
+          </a>
+          <div class="trending-count"><%= topic.post_count %> posts</div>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div style="text-align: center; padding: 3rem; color: #64748B;">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">📈</div>
+      <p>No trending topics yet</p>
+      <p style="font-size: 0.875rem;">Start using hashtags in your posts!</p>
+    </div>
+  <% } %>
+</div>

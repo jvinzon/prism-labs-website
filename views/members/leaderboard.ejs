@@ -1,0 +1,231 @@
+<% layout = 'layouts/main' %>
+
+<style>
+.leaderboard-container {
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.leaderboard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.leaderboard-tabs {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.lb-tab {
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 600;
+  border: 2px solid var(--border-color);
+  background: var(--bg-secondary);
+  transition: all 0.2s;
+}
+
+.lb-tab.active, .lb-tab:hover {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.lb-card {
+  background: var(--bg-secondary);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 2rem;
+}
+
+.lb-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.lb-entry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  background: var(--bg-primary);
+  transition: transform 0.2s;
+}
+
+.lb-entry:hover {
+  transform: translateX(5px);
+}
+
+.lb-rank {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.lb-rank-1 { background: linear-gradient(135deg, #FBBF24, #F59E0B); color: white; }
+.lb-rank-2 { background: linear-gradient(135deg, #9CA3AF, #6B7280); color: white; }
+.lb-rank-3 { background: linear-gradient(135deg, #D97706, #B45309); color: white; }
+.lb-rank-other { background: var(--border-color); color: var(--text-secondary); }
+
+.lb-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.lb-info {
+  flex: 1;
+}
+
+.lb-name {
+  font-weight: 700;
+  color: var(--text-primary);
+  display: block;
+}
+
+.lb-username {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.lb-stats {
+  text-align: right;
+}
+
+.lb-xp {
+  font-weight: 800;
+  color: var(--accent-color);
+  font-size: 1.25rem;
+}
+
+.lb-level {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.team-card {
+  background: var(--bg-secondary);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.team-color {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+}
+
+.team-info {
+  flex: 1;
+}
+
+.team-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.team-points {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--accent-color);
+}
+
+.team-members {
+  color: var(--text-secondary);
+}
+</style>
+
+<div class="leaderboard-container">
+  <div class="leaderboard-header">
+    <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏆 PRISM Labs Leaderboards</h1>
+    <p style="color: var(--text-secondary);">See who's leading the pack!</p>
+  </div>
+
+  <div class="leaderboard-tabs">
+    <a href="/members/leaderboard/individual" class="lb-tab <%= type === 'individual' ? 'active' : '' %>">Individual XP</a>
+    <a href="/members/leaderboard/teams" class="lb-tab <%= type === 'teams' ? 'active' : '' %>">Team Standings</a>
+    <a href="/members/leaderboard/challenges" class="lb-tab <%= type === 'challenges' ? 'active' : '' %>">Challenges</a>
+    <a href="/members/leaderboard/helpers" class="lb-tab <%= type === 'helpers' ? 'active' : '' %>">Top Helpers</a>
+  </div>
+
+  <% if (type === 'individual') { %>
+    <div class="lb-card">
+      <h2 style="margin-bottom: 1.5rem;">Individual XP Rankings (All-Time)</h2>
+      <div class="lb-grid">
+        <% leaderboard.forEach(entry => { %>
+          <div class="lb-entry">
+            <div class="lb-rank lb-rank-<%= entry.rank <= 3 ? entry.rank : 'other' %>">
+              <%= entry.rank %>
+            </div>
+            <div class="lb-avatar">
+              <%= entry.name.charAt(0) %>
+            </div>
+            <div class="lb-info">
+              <span class="lb-name"><%= entry.name %></span>
+              <span class="lb-username">@<%= entry.name.toLowerCase().replace(' ', '') %></span>
+            </div>
+            <div class="lb-stats">
+              <div class="lb-xp"><%= entry.total_xp.toLocaleString() %> XP</div>
+              <div class="lb-level"><%= entry.badge_icon %> Level <%= entry.current_level %> (<%= entry.level_name %>)</div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  <% } %>
+
+  <% if (type === 'teams') { %>
+    <div class="lb-card">
+      <h2 style="margin-bottom: 1.5rem;">Team Standings (This Term)</h2>
+      <% teams.forEach(team => { %>
+        <div class="team-card">
+          <div class="team-color" style="background: <%= team.color %>;">
+            <%= team.code %>
+          </div>
+          <div class="team-info">
+            <div class="team-name"><%= team.name %> Team</div>
+            <div class="team-points"><%= team.term_points.toLocaleString() %> points</div>
+            <div class="team-members"><%= team.member_count %> members</div>
+          </div>
+          <div style="font-size: 3rem;"><%= team.rank === 1 ? '👑' : team.rank === 2 ? '🥈' : team.rank === 3 ? '🥉' : '' %></div>
+        </div>
+      <% }) %>
+    </div>
+  <% } %>
+</div>

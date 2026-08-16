@@ -1,0 +1,10 @@
+// Add this to server.js after other route imports
+
+const socialRoutes = require('./routes/social');
+
+// Add this route after other app.use statements
+app.use('/members/social', requireAuth, socialRoutes);
+
+// Add to navigation in views/layouts/main.ejs
+// Find the nav-links div and add:
+// <a href="/members/social/feed" class="nav-link">Social</a>

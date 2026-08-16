@@ -1,0 +1,231 @@
+<% layout = 'layouts/main' %>
+
+<style>
+.teams-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.teams-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.teams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.team-card {
+  background: var(--bg-secondary);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  border-top: 6px solid;
+}
+
+.team-card-P { border-color: #3B82F6; }
+.team-card-R { border-color: #8B5CF6; }
+.team-card-I { border-color: #10B981; }
+.team-card-S { border-color: #F97316; }
+.team-card-M { border-color: #EC4899; }
+
+.team-icon {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: 800;
+  color: white;
+}
+
+.team-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.team-description {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.team-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.team-stat {
+  padding: 1rem;
+  background: var(--bg-primary);
+  border-radius: 0.75rem;
+}
+
+.team-stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--accent-color);
+}
+
+.team-stat-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.my-team-section {
+  background: var(--bg-secondary);
+  border-radius: 1rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-md);
+}
+
+.team-change-form {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.team-members-section {
+  background: var(--bg-secondary);
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.member-card {
+  padding: 1rem;
+  background: var(--bg-primary);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.member-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+}
+</style>
+
+<div class="teams-container">
+  <div class="teams-header">
+    <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏆 PRISM Teams</h1>
+    <p style="color: var(--text-secondary);">Join a team and compete for glory!</p>
+  </div>
+
+  <% if (myTeam) { %>
+    <div class="my-team-section">
+      <h2 style="margin-bottom: 1rem;">Your Team</h2>
+      <div style="display: flex; align-items: center; gap: 2rem;">
+        <div class="team-icon" style="background: <%= myTeam.color %>; width: 80px; height: 80px; font-size: 2rem;">
+          <%= myTeam.code %>
+        </div>
+        <div style="flex: 1;">
+          <div style="font-size: 1.5rem; font-weight: 800;"><%= myTeam.name %> Team</div>
+          <div style="color: var(--text-secondary);"><%= myTeam.term_points %> points this term</div>
+          <% if (myTeam.is_captain) { %>
+            <div style="margin-top: 0.5rem; padding: 0.25rem 0.75rem; background: #FBBF24; color: white; border-radius: 9999px; display: inline-block; font-weight: 700; font-size: 0.875rem;">
+              👑 Team Captain
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <% if (myTeam.can_change_team) { %>
+        <div class="team-change-form">
+          <h3>Want to switch teams?</h3>
+          <form action="/members/gamification/teams/change" method="POST" style="margin-top: 1rem;">
+            <select name="team_id" style="padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border-color); margin-right: 1rem;">
+              <% teams.forEach(team => { %>
+                <option value="<%= team.id %>" <%= team.id === myTeam.team_id ? 'selected' : '' %>><%= team.name %></option>
+              <% }) %>
+            </select>
+            <button type="submit" class="btn-primary" style="padding: 0.75rem 2rem; border-radius: 0.5rem; border: none; background: var(--accent-color); color: white; font-weight: 700; cursor: pointer;">
+              Change Team
+            </button>
+          </form>
+        </div>
+      <% } %>
+    </div>
+  <% } else { %>
+    <div class="my-team-section">
+      <h2>Choose Your Team</h2>
+      <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Select a team to join for this term:</p>
+      <form action="/members/gamification/teams/join" method="POST">
+        <select name="team_id" style="padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border-color); margin-right: 1rem; min-width: 200px;">
+          <% teams.forEach(team => { %>
+            <option value="<%= team.id %>"><%= team.name %></option>
+          <% }) %>
+        </select>
+        <button type="submit" class="btn-primary" style="padding: 0.75rem 2rem; border-radius: 0.5rem; border: none; background: var(--accent-color); color: white; font-weight: 700; cursor: pointer;">
+          Join Team
+        </button>
+      </form>
+    </div>
+  <% } %>
+
+  <div class="teams-grid">
+    <% teams.forEach(team => { %>
+      <div class="team-card team-card-<%= team.code %>">
+        <div class="team-icon" style="background: <%= team.color %>;">
+          <%= team.code %>
+        </div>
+        <div class="team-name"><%= team.name %></div>
+        <div class="team-description"><%= team.description %></div>
+        <div class="team-stats">
+          <div class="team-stat">
+            <div class="team-stat-value"><%= team.term_points %></div>
+            <div class="team-stat-label">Term Points</div>
+          </div>
+          <div class="team-stat">
+            <div class="team-stat-value"><%= team.total_points %></div>
+            <div class="team-stat-label">All-Time</div>
+          </div>
+        </div>
+        <div style="color: var(--text-secondary); font-size: 0.875rem;">
+          <%= team.member_count %> members
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <div class="team-members-section">
+    <h2 style="margin-bottom: 1.5rem;">Team Members by Rank</h2>
+    <div class="members-grid">
+      <% leaderboard.forEach((entry, i) => { %>
+        <div class="member-card">
+          <div class="member-avatar"><%= entry.name.charAt(0) %></div>
+          <div style="flex: 1;">
+            <div style="font-weight: 700;"><%= entry.name %></div>
+            <div style="font-size: 0.875rem; color: var(--text-secondary);">
+              #<%= i + 1 %> • <%= entry.total_xp %> XP
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</div>

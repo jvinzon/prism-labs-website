@@ -1,0 +1,83 @@
+<% layout = 'layouts/main' %>
+
+<style>
+.notifications-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.notification-card {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.notification-icon {
+  font-size: 2rem;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-content a {
+  color: #2563EB;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.notification-time {
+  font-size: 0.875rem;
+  color: #64748B;
+  margin-top: 0.5rem;
+}
+
+.notification-unread {
+  background: #EFF6FF;
+}
+</style>
+
+<div class="notifications-container">
+  <h1 style="margin-bottom: 2rem;">🔔 Notifications</h1>
+  
+  <% if (notifications && notifications.length > 0) { %>
+    <% notifications.forEach(notif => { %>
+      <div class="notification-card <%= notif.is_read ? '' : 'notification-unread' %>">
+        <div class="notification-icon">
+          <% if (notif.type === 'like') { %>❤️<% } %>
+          <% if (notif.type === 'retweet') { %>🔁<% } %>
+          <% if (notif.type === 'reply') { %>💬<% } %>
+          <% if (notif.type === 'follow') { %>👥<% } %>
+          <% if (notif.type === 'mention') { %>@<% } %>
+        </div>
+        <div class="notification-content">
+          <p>
+            <a href="/members/social/user/<%= notif.actor_id %>"><%= notif.actor_name %></a>
+            <% if (notif.type === 'like') { %> liked your post<% } %>
+            <% if (notif.type === 'retweet') { %> retweeted your post<% } %>
+            <% if (notif.type === 'reply') { %> replied to your post<% } %>
+            <% if (notif.type === 'follow') { %> started following you<% } %>
+            <% if (notif.type === 'mention') { %> mentioned you<% } %>
+          </p>
+          <% if (notif.post_content) { %>
+            <p style="color: #64748B; font-size: 0.875rem; margin-top: 0.5rem;">
+              "<%= notif.post_content.substring(0, 100) %><%= notif.post_content.length > 100 ? '...' : '' %>"
+            </p>
+          <% } %>
+          <div class="notification-time"><%= new Date(notif.created_at).toLocaleDateString() %></div>
+        </div>
+      </div>
+    <% }) %>
+  <% } else { %>
+    <div style="text-align: center; padding: 3rem; color: #64748B;">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">🔔</div>
+      <p>No notifications yet</p>
+    </div>
+  <% } %>
+</div>
