@@ -1,0 +1,355 @@
+<% layout = 'layouts/main' %>
+
+<style>
+.resources-container {
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.resources-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.resource-filters {
+  background: var(--bg-secondary);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+}
+
+.filter-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.resources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.resource-card {
+  background: var(--bg-secondary);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 4px solid var(--accent-color);
+}
+
+.resource-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+}
+
+.resource-card.programming { border-left-color: #3B82F6; }
+.resource-card.systems { border-left-color: #F97316; }
+.resource-card.innovation { border-left-color: #10B981; }
+.resource-card.media { border-left-color: #EC4899; }
+.resource-card.refurbishing { border-left-color: #8B5CF6; }
+
+.resource-category {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: var(--bg-primary);
+  color: var(--accent-color);
+  margin-bottom: 0.75rem;
+}
+
+.resource-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  color: var(--text-primary);
+}
+
+.resource-url {
+  color: var(--accent-color);
+  text-decoration: none;
+  font-size: 0.875rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.resource-url:hover {
+  text-decoration: underline;
+}
+
+.resource-description {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.resource-meta {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+
+.resource-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
+}
+
+.resource-badge.free {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+.resource-badge.paid {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.resource-badge.beginner {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+
+.resource-badge.intermediate {
+  background: #FED7AA;
+  color: #9A3412;
+}
+
+.resource-badge.advanced {
+  background: #FECACA;
+  color: #991B1B;
+}
+
+.resource-tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.resource-tag {
+  padding: 0.25rem 0.5rem;
+  background: var(--bg-primary);
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.resource-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-resource {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background: var(--border-color);
+}
+
+.suggest-resource {
+  margin-top: 3rem;
+  background: var(--bg-secondary);
+  padding: 2rem;
+  border-radius: 1rem;
+  text-align: center;
+}
+
+.suggest-form {
+  margin-top: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.suggest-form input,
+.suggest-form textarea,
+.suggest-form select {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.suggest-form textarea {
+  grid-column: 1 / -1;
+  min-height: 100px;
+}
+
+.suggest-form button {
+  grid-column: 1 / -1;
+  padding: 1rem;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+</style>
+
+<div class="resources-container">
+  <div class="resources-header">
+    <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">📚 Learning Resources</h1>
+    <p style="color: var(--text-secondary);">Curated resources to accelerate your skills development</p>
+  </div>
+
+  <div class="resource-filters">
+    <div class="filter-group">
+      <label>Category</label>
+      <select onchange="window.location.href=this.value">
+        <option value="/members/resources">All Categories</option>
+        <% categories.forEach(cat => { %>
+          <option value="/members/resources?category=<%= cat.category %>" <%= filters.category === cat.category ? 'selected' : '' %>><%= cat.category %></option>
+        <% }) %>
+      </select>
+    </div>
+    
+    <div class="filter-group">
+      <label>Track</label>
+      <select onchange="window.location.href=this.value">
+        <option value="/members/resources">All Tracks</option>
+        <% tracks.forEach(track => { %>
+          <option value="/members/resources?track=<%= track.track %>" <%= filters.track === track.track ? 'selected' : '' %>><%= track.track.charAt(0).toUpperCase() + track.track.slice(1) %></option>
+        <% }) %>
+      </select>
+    </div>
+    
+    <div class="filter-group">
+      <label>Difficulty</label>
+      <select onchange="window.location.href=this.value">
+        <option value="/members/resources">All Levels</option>
+        <option value="/members/resources?level=beginner" <%= filters.level === 'beginner' ? 'selected' : '' %>>Beginner</option>
+        <option value="/members/resources?level=intermediate" <%= filters.level === 'intermediate' ? 'selected' : '' %>>Intermediate</option>
+        <option value="/members/resources?level=advanced" <%= filters.level === 'advanced' ? 'selected' : '' %>>Advanced</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="resources-grid">
+    <% resources.forEach(resource => { %>
+      <div class="resource-card <%= resource.track %>">
+        <span class="resource-category"><%= resource.category %></span>
+        <h3 class="resource-title"><%= resource.title %></h3>
+        <a href="<%= resource.url %>" target="_blank" class="resource-url">🔗 Visit Resource</a>
+        <p class="resource-description"><%= resource.description %></p>
+        
+        <div class="resource-meta">
+          <span class="resource-badge <%= resource.is_free ? 'free' : 'paid' %>">
+            <%= resource.is_free ? 'FREE' : 'PAID' %>
+          </span>
+          <span class="resource-badge <%= resource.difficulty %>">
+            <%= resource.difficulty.charAt(0).toUpperCase() + resource.difficulty.slice(1) %>
+          </span>
+        </div>
+        
+        <% if (resource.tags) { %>
+          <div class="resource-tags">
+            <% JSON.parse(resource.tags).slice(0, 5).forEach(tag => { %>
+              <span class="resource-tag">#<%= tag %></span>
+            <% }) %>
+          </div>
+        <% } %>
+        
+        <div class="resource-actions">
+          <a href="<%= resource.url %>" target="_blank" class="btn-resource btn-primary">
+            Start Learning
+          </a>
+          <button class="btn-resource btn-secondary" onclick="bookmarkResource('<%= resource.id %>')">
+            🔖 Bookmark
+          </button>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <div class="suggest-resource">
+    <h2>💡 Can't Find What You're Looking For?</h2>
+    <p>Suggest a resource and we'll add it to the library!</p>
+    
+    <form class="suggest-form" action="/members/resources/suggest" method="POST">
+      <input type="text" name="title" placeholder="Resource Title" required>
+      <input type="url" name="url" placeholder="Resource URL" required>
+      <select name="category">
+        <option value="">Select Category</option>
+        <option value="Interactive Learning">Interactive Learning</option>
+        <option value="Video Courses">Video Courses</option>
+        <option value="Documentation">Documentation</option>
+        <option value="Practice Projects">Practice Projects</option>
+        <option value="Tutorials">Tutorials</option>
+        <option value="Design Tools">Design Tools</option>
+        <option value="Hardware Repair">Hardware Repair</option>
+      </select>
+      <select name="track">
+        <option value="">Select Track</option>
+        <option value="programming">Programming</option>
+        <option value="systems">Systems</option>
+        <option value="innovation">Innovation</option>
+        <option value="media">Media</option>
+        <option value="refurbishing">Refurbishing</option>
+      </select>
+      <textarea name="description" placeholder="Describe this resource and why it's valuable..." required></textarea>
+      <button type="submit">Submit Suggestion</button>
+    </form>
+  </div>
+</div>
+
+<script>
+async function bookmarkResource(resourceId) {
+  const response = await fetch('/members/resources/' + resourceId + '/bookmark', {
+    method: 'POST'
+  });
+  const result = await response.json();
+  if (result.success) {
+    alert('Resource bookmarked!');
+  }
+}
+</script>

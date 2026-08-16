@@ -500,4 +500,138 @@ router.post('/settings/theme', requireAuth, async (req, res) => {
   }
 });
 
+
+
+// ==================== COMPREHENSIVE RESOURCE LIBRARY ====================
+
+// Main resources page with all categories
+router.get('/resources', requireAuth, async (req, res) => {
+  try {
+    const db = await getDB();
+    const { category, track, level } = req.query;
+    
+    let query = 'SELECT * FROM learning_resources WHERE is_active = 1';
+    const params = [];
+    
+    if (category) { query += ' AND category = ?'; params.push(category); }
+    if (track) { query += ' AND track = ?'; params.push(track); }
+    if (level) { query += ' AND difficulty = ?'; params.push(level); }
+    
+    query += ' ORDER BY category, sort_order';
+    
+    const resources = db.prepare(query).all(...params);
+    
+    // Get categories for filter
+    const categories = db.prepare('SELECT DISTINCT category FROM learning_resources WHERE is_active = 1').all();
+    const tracks = db.prepare('SELECT DISTINCT track FROM learning_resources WHERE is_active = 1').all();
+    
+    db.close();
+    
+    res.render('members/resources', {
+      title: 'Learning Resources - PRISM Labs',
+      resources,
+      categories,
+      tracks,
+      filters: { category, track, level }
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Resource detail page
+router.get('/resources/:id', requireAuth, async (req, res) => {
+  try {
+    const db = await getDB();
+    const resource = db.prepare('SELECT * FROM learning_resources WHERE id = ?').get(req.params.id);
+    
+    if (!resource) {
+      req.flash('error', 'Resource not found');
+      db.close();
+      return res.redirect('/members/resources');
+    }
+    
+    // Get related resources
+    const related = db.prepare(`
+      SELECT * FROM learning_resources
+      WHERE track = ? AND id != ? AND is_active = 1
+      ORDER BY RANDOM()
+      LIMIT 5
+    `).all(resource.track, req.params.id);
+    
+    // Increment views
+    db.prepare('UPDATE learning_resources SET views_count = views_count + 1 WHERE id = ?').run(req.params.id);
+    db.close();
+    
+    res.render('members/resource-detail', {
+      title: resource.title + ' - PRISM Labs',
+      resource,
+      related
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Bookmark resource
+router.post('/resources/:id/bookmark', requireAuth, async (req, res) => {
+  try {
+    const db = await getDB();
+    const bookmarkId = uuidv4();
+    db.prepare(`
+      INSERT OR IGNORE INTO resource_bookmarks (id, user_id, resource_id)
+      VALUES (?, ?, ?)
+    `).run(bookmarkId, req.user.id, req.params.id);
+    db.close();
+    
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false });
+  }
+});
+
+// My bookmarked resources
+router.get('/resources/bookmarks', requireAuth, async (req, res) => {
+  try {
+    const db = await getDB();
+    const bookmarks = db.prepare(`
+      SELECT r.*, rb.created_at as bookmarked_at
+      FROM resource_bookmarks rb
+      JOIN learning_resources r ON rb.resource_id = r.id
+      WHERE rb.user_id = ?
+      ORDER BY rb.created_at DESC
+    `).all(req.user.id);
+    db.close();
+    
+    res.render('members/resource-bookmarks', {
+      title: 'My Bookmarks - PRISM Labs',
+      bookmarks
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Suggest a resource
+router.post('/resources/suggest', requireAuth, async (req, res) => {
+  try {
+    const db = await getDB();
+    const { title, url, description, category, track } = req.body;
+    
+    const suggestionId = uuidv4();
+    db.prepare(`
+      INSERT INTO resource_suggestions (id, user_id, title, url, description, category, track, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')
+    `).run(suggestionId, req.user.id, title, url, description, category, track);
+    db.close();
+    
+    req.flash('success', 'Resource suggestion submitted!');
+    res.redirect('/members/resources');
+  } catch (err) {
+    req.flash('error', 'Failed to submit suggestion');
+    res.redirect('back');
+  }
+});
+
+
 module.exports = router;

@@ -485,3 +485,146 @@ body {
     flex-direction: column;
   }
 }
+
+
+
+/* Footer Styles */
+.footer {
+  background: var(--bg-secondary);
+  border-top: 3px solid var(--accent-color);
+  padding: 3rem 0 2rem;
+  margin-top: 4rem;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Centered Logo Section */
+.footer-logo-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.footer-logo {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1rem;
+  display: block;
+}
+
+.footer-tagline {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Footer Grid */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.footer-brand h3,
+.footer-links h4,
+.footer-contact h4 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+}
+
+.footer-brand p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.footer-copyright {
+  font-weight: 600;
+  color: var(--accent-color);
+  margin-top: 1rem;
+}
+
+.footer-links a {
+  display: block;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 0.5rem 0;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: var(--accent-color);
+}
+
+.footer-contact p {
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Theme Switcher */
+.footer-theme-switcher {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer-theme-switcher p {
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.theme-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.theme-btn {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+}
+
+.theme-btn:hover {
+  background: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .footer-logo {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .theme-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .theme-btn {
+    width: 100%;
+    max-width: 200px;
+  }
+}

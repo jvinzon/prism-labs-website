@@ -1,0 +1,58 @@
+<% layout = 'layouts/main' %>
+
+<style>
+.bookmarks-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.bookmarks-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.bookmarks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.empty-bookmarks {
+  text-align: center;
+  padding: 4rem;
+  color: var(--text-secondary);
+}
+</style>
+
+<div class="bookmarks-container">
+  <div class="bookmarks-header">
+    <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔖 My Bookmarked Resources</h1>
+    <p style="color: var(--text-secondary);">Your personal collection of learning resources</p>
+  </div>
+
+  <% if (bookmarks && bookmarks.length > 0) { %>
+    <div class="bookmarks-grid">
+      <% bookmarks.forEach(bookmark => { %>
+        <div class="resource-card">
+          <span class="resource-category"><%= bookmark.category %></span>
+          <h3 class="resource-title"><%= bookmark.title %></h3>
+          <a href="<%= bookmark.url %>" target="_blank" class="resource-url">🔗 Visit Resource</a>
+          <p class="resource-description"><%= bookmark.description %></p>
+          <a href="<%= bookmark.url %>" target="_blank" class="btn-resource btn-primary">
+            Continue Learning
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="empty-bookmarks">
+      <div style="font-size: 4rem; margin-bottom: 1rem;">🔖</div>
+      <h3>No bookmarks yet</h3>
+      <p>Bookmark resources to build your personal learning library!</p>
+      <a href="/members/resources" class="btn-resource btn-primary" style="display: inline-block; margin-top: 1rem; padding: 1rem 2rem; text-decoration: none;">
+        Browse Resources
+      </a>
+    </div>
+  <% } %>
+</div>
