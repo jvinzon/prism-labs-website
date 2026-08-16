@@ -1,4 +1,4 @@
-const { createDatabase } = require('../db');
+// Authentication middleware
 
 // Check if user is authenticated
 function requireAuth(req, res, next) {
@@ -16,35 +16,15 @@ async function requireAdmin(req, res, next) {
     return res.redirect('/admin/login');
   }
   
-  const db = await createDatabase();
-  const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.session.userId);
-  db.close();
-  
-  if (!user || user.role !== 'admin') {
+  if (!req.session.isAdmin) {
     req.flash('error', 'Access denied. Admin privileges required.');
     return res.redirect('/members/dashboard');
   }
   
-  req.user = user;
   return next();
-}
-
-// Flash messages middleware
-function flashMessages(req, res, next) {
-  res.locals.messages = req.session.messages || [];
-  req.session.messages = [];
-  res.locals.user = req.session.user || null;
-  next();
-}
-
-// Add flash message
-function flash(type, message) {
-  this.session.messages = this.session.messages || [];
-  this.session.messages.push({ type, message });
 }
 
 module.exports = {
   requireAuth,
-  requireAdmin,
-  flashMessages
+  requireAdmin
 };

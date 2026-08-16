@@ -1,48 +1,16 @@
-class ThemeSwitcher {
-  constructor() {
-    this.theme = localStorage.getItem('prism-theme') || 'light';
-    this.init();
-  }
+// PRISM Labs - Theme Switcher
 
-  init() {
-    this.applyTheme(this.theme);
-    this.createUI();
-  }
-
-  applyTheme(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    this.theme = theme;
-    localStorage.setItem('prism-theme', theme);
-  }
-
-  createUI() {
-    const html = `
-      <div class="theme-panel" id="themePanel">
-        <div class="theme-option" data-theme="light">☀️ Light</div>
-        <div class="theme-option" data-theme="dark">🌙 Dark</div>
-        <div class="theme-option" data-theme="prism">🌈 PRISM</div>
-        <div class="theme-option" data-theme="ocean">🌊 Ocean</div>
-        <div class="theme-option" data-theme="forest">🌲 Forest</div>
-      </div>
-      <button class="theme-btn" id="themeToggle">🎨</button>
-    `;
-    document.body.insertAdjacentHTML('beforeend', html);
-    
-    document.getElementById('themeToggle').onclick = () => {
-      document.getElementById('themePanel').classList.toggle('active');
-    };
-    
-    document.querySelectorAll('.theme-option').forEach(opt => {
-      opt.onclick = () => {
-        this.applyTheme(opt.dataset.theme);
-        document.getElementById('themePanel').classList.remove('active');
-      };
+// Load saved theme on page load
+document.addEventListener('DOMContentLoaded', () => {
+  const savedTheme = localStorage.getItem('prism-theme') || 'light';
+  document.body.className = `theme-${savedTheme}`;
+  
+  // Update theme buttons
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const theme = btn.dataset.theme;
+      document.body.className = `theme-${theme}`;
+      localStorage.setItem('prism-theme', theme);
     });
-  }
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => new ThemeSwitcher());
-} else {
-  new ThemeSwitcher();
-}
+  });
+});

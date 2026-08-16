@@ -45,7 +45,7 @@ async function saveDatabase() {
   fs.writeFileSync(dbPath, buffer);
 }
 
-// Wrapper functions that mimic better-sqlite3 API
+// Wrapper class that mimics better-sqlite3 API
 class Database {
   constructor() {
     this.db = null;

@@ -1,119 +1,45 @@
 /* PRISM Labs - Theme System */
 
-:root {
-  /* Default Light Theme */
-  --bg-primary: #F8FAFC;
-  --bg-secondary: #FFFFFF;
-  --text-primary: #1E293B;
-  --text-secondary: #64748B;
-  --border-color: #E2E8F0;
-  --accent-color: #2563EB;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-}
-
 /* Dark Theme */
-[data-theme="dark"] {
+.theme-dark {
   --bg-primary: #0F172A;
   --bg-secondary: #1E293B;
   --text-primary: #F1F5F9;
   --text-secondary: #94A3B8;
   --border-color: #334155;
   --accent-color: #3B82F6;
+  --accent-hover: #60A5FA;
 }
 
 /* PRISM Theme */
-[data-theme="prism"] {
-  --bg-primary: #F0F9FF;
+.theme-prism {
+  --bg-primary: linear-gradient(135deg, #F8FAFC 0%, #E0E7FF 100%);
   --bg-secondary: #FFFFFF;
   --text-primary: #1E293B;
-  --border-color: #BAE6FD;
+  --text-secondary: #64748B;
+  --border-color: #C7D2FE;
   --accent-color: #2563EB;
-  --gradient-primary: linear-gradient(135deg, #2563EB, #10B981);
+  --accent-hover: #1D4ED8;
 }
 
 /* Ocean Theme */
-[data-theme="ocean"] {
-  --bg-primary: #ECFEFF;
-  --bg-secondary: #FFFFFF;
-  --text-primary: #164E63;
-  --border-color: #A5F3FC;
-  --accent-color: #0891B2;
+.theme-ocean {
+  --bg-primary: #F0F9FF;
+  --bg-secondary: #E0F2FE;
+  --text-primary: #0C4A6E;
+  --text-secondary: #0369A1;
+  --border-color: #BAE6FD;
+  --accent-color: #0284C7;
+  --accent-hover: #0369A1;
 }
 
 /* Forest Theme */
-[data-theme="forest"] {
+.theme-forest {
   --bg-primary: #F0FDF4;
-  --bg-secondary: #FFFFFF;
+  --bg-secondary: #DCFCE7;
   --text-primary: #14532D;
+  --text-secondary: #166534;
   --border-color: #BBF7D0;
   --accent-color: #16A34A;
-}
-
-body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  transition: all 0.3s ease;
-}
-
-.card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-}
-
-.btn-primary {
-  background: var(--accent-color);
-  color: white;
-}
-
-.theme-switcher {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 1000;
-}
-
-.theme-btn {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 2px solid var(--border-color);
-  background: var(--bg-secondary);
-  cursor: pointer;
-  font-size: 1.5rem;
-}
-
-.theme-panel {
-  position: fixed;
-  bottom: 6rem;
-  right: 2rem;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 1rem;
-  padding: 1rem;
-  box-shadow: var(--shadow-lg);
-  display: none;
-}
-
-.theme-panel.active {
-  display: block;
-}
-
-.theme-option {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  margin-bottom: 0.5rem;
-}
-
-.theme-option:hover {
-  background: var(--bg-primary);
-}
-
-.theme-option.active {
-  background: var(--accent-color);
-  color: white;
+  --accent-hover: #15803D;
 }
